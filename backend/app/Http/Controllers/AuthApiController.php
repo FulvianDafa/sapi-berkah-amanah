@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * @method \Laravel\Sanctum\NewAccessToken createToken(string $name, array $abilities = [])
- */
+
 
 class AuthApiController extends Controller
 {
