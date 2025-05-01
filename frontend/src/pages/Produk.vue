@@ -49,11 +49,13 @@
         </div>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script setup>
 import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
 import { ref, computed } from 'vue'
 
 // Kategori aktif
