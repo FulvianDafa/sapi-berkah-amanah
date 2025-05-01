@@ -1,0 +1,9 @@
+import axios from "axios";
+
+const API_URL = "http://localhost:8000/api/hewankurban"; // Ganti dengan URL endpoint backend kamu
+
+export const getHewanKurban = () => axios.get(API_URL);
+export const createHewanKurban = (data) => axios.post(API_URL, data);
+export const updateHewanKurban = (id, data) =>
+  axios.put(`${API_URL}/${id}`, data);
+export const deleteHewanKurban = (id) => axios.delete(`${API_URL}/${id}`);

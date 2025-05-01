@@ -8,7 +8,7 @@ use App\Models\HewanKurban;
 class HewanKurbanSeeder extends Seeder
 {
     public function run()
-    {
+    {  
         HewanKurban::create([
             'nama' => 'Sapi Kurban 01',
             'deskripsi' => 'Sapi besar dengan harga terjangkau.',
