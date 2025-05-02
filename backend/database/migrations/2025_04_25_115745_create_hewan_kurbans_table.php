@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('hewan_kurbans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->text('deskripsi')->nullable();
-            $table->integer('berat'); // dalam Kg
-            $table->decimal('harga', 15, 2);
-            $table->string('gambar')->nullable(); // path ke file gambar
+            $table->string('jenis_sapi');  // Tambah jenis sapi
+            $table->integer('umur');       // Tambah umur
+            $table->integer('berat');      // Sudah ada
+            $table->decimal('harga', 15, 2); // Sudah ada
+            $table->text('deskripsi')->nullable(); // Sudah ada
+            $table->string('video_url')->nullable(); // Untuk video utama
+            $table->string('video_public_id')->nullable();
+            $table->enum('status', ['tersedia', 'terjual'])->default('tersedia');
             $table->timestamps();
         });
     }
