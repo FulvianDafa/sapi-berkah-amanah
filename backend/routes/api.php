@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HewanKurbanController;
 use App\Http\Controllers\AdminAuthController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\ResellerController;
 
 // Admin routes
 Route::prefix('admin')->group(function () {
@@ -27,5 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Endpoint untuk katalog hewan kurban
 Route::get('/hewan-kurban', [HewanKurbanController::class, 'getKatalog']);
+
+Route::post('/daftar-reseller', [ResellerController::class, 'store']);
 
 
