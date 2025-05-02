@@ -5,47 +5,71 @@
     <div class="p-8">
       <h1 class="text-3xl font-bold text-center mb-8">Katalog Sapi</h1>
 
-      <!-- Tab Kategori -->
-      <div class="flex flex-wrap justify-center space-x-4 border-b pb-2 mb-6">
-        <button
-          v-for="(cat, index) in categories"
-          :key="index"
-          @click="selectedCategory = cat.name"
-          :class="[
-            'text-lg font-semibold pb-2',
-            selectedCategory === cat.name
-              ? 'border-b-4 border-green-500 text-green-600'
-              : 'text-gray-600'
-          ]"
-        >
-          {{ cat.name }}
-        </button>
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-8">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"
+        ></div>
+        <p class="mt-4 text-gray-600">Memuat data...</p>
       </div>
 
-      <!-- Grid Item Sapi -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div
-          v-for="(item, index) in filteredItems"
-          :key="index"
-          class="p-4 bg-green-50 rounded-lg shadow hover:shadow-md transition"
-        >
-          <img
-            :src="item.image"
-            alt="sapi"
-            class="w-full h-40 object-cover rounded mb-4"
-          />
-          <h3 class="text-lg font-bold text-green-700">{{ item.name }}</h3>
-          <p class="text-sm text-gray-600">{{ item.weight }} kg</p>
-          <p class="text-sm text-gray-500 italic">{{ item.class }}</p>
+      <!-- Error State -->
+      <div v-else-if="error" class="text-center py-8 text-red-600">
+        {{ error }}
+      </div>
 
-          <!-- Tombol WhatsApp -->
-          <a
-            :href="`https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20untuk%20memesan%20${encodeURIComponent(item.name)}.%20Apakah%20masih%20tersedia?`"
-            target="_blank"
-            class="mt-4 inline-block bg-green-600 text-white text-sm px-4 py-2 rounded-full hover:bg-green-700 transition"
+      <div v-else>
+        <!-- Tab Kategori -->
+        <div class="flex flex-wrap justify-center space-x-4 border-b pb-2 mb-6">
+          <button
+            v-for="(cat, index) in categories"
+            :key="index"
+            @click="selectedCategory = cat"
+            :class="[
+              'text-lg font-semibold pb-2',
+              selectedCategory === cat
+                ? 'border-b-4 border-green-500 text-green-600'
+                : 'text-gray-600',
+            ]"
           >
-            Booking via WhatsApp
-          </a>
+            {{ cat }}
+          </button>
+        </div>
+
+        <!-- Grid Item Sapi -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div
+            v-for="item in filteredItems"
+            :key="item.id"
+            class="p-4 bg-green-50 rounded-lg shadow hover:shadow-md transition"
+          >
+            <img
+              :src="
+                item.photos && item.photos.length > 0
+                  ? item.photos[0]
+                  : '/assets/default-sapi.jpg'
+              "
+              alt="sapi"
+              class="w-full h-40 object-cover rounded mb-4"
+            />
+            <h3 class="text-lg font-bold text-green-700">
+              {{ item.jenis_sapi }}
+            </h3>
+            <p class="text-sm text-gray-600">{{ item.berat_sapi }} kg</p>
+            <p class="text-sm text-gray-500 italic">{{ item.kategori }}</p>
+            <p class="text-sm font-semibold text-green-600 mt-2">
+              Rp {{ formatPrice(item.harga) }}
+            </p>
+
+            <!-- Tombol WhatsApp -->
+            <a
+              :href="generateWhatsAppLink(item)"
+              target="_blank"
+              class="mt-4 inline-block bg-green-600 text-white text-sm px-4 py-2 rounded-full hover:bg-green-700 transition"
+            >
+              Booking via WhatsApp
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -54,56 +78,65 @@
 </template>
 
 <script setup>
-import Navbar from '../components/Navbar.vue'
-import Footer from '../components/Footer.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from "vue";
+import axios from "axios";
+import Navbar from "../components/Navbar.vue";
+import Footer from "../components/Footer.vue";
 
-// Kategori aktif
-const selectedCategory = ref('Prime Class')
+const loading = ref(false);
+const error = ref(null);
+const sapiItems = ref([]);
+const selectedCategory = ref(null);
+const categories = ref([]);
 
-// Kategori sapi
-const categories = [
-  { name: 'Prime Class' },
-  { name: 'Bigboss Class' },
-  { name: 'Sultan Class' }
-]
+// Format harga ke format Rupiah
+const formatPrice = (price) => {
+  return new Intl.NumberFormat("id-ID").format(price);
+};
 
-// Data sapi
-const sapiItems = [
-  {
-    name: 'Sapi Prime 1',
-    weight: 500,
-    class: 'Prime Class',
-    image: '/assets/sapi1.jpg'
-  },
-  {
-    name: 'Sapi Bigboss 1',
-    weight: 620,
-    class: 'Bigboss Class',
-    image: '/assets/sapi2.jpg'
-  },
-  {
-    name: 'Sapi Sultan 1',
-    weight: 750,
-    class: 'Sultan Class',
-    image: '/assets/sapi3.jpg'
-  },
-  {
-    name: 'Sapi Bigboss 2',
-    weight: 670,
-    class: 'Bigboss Class',
-    image: '/assets/sapi1.jpg'
-  },
-  {
-    name: 'Sapi Sultan 2',
-    weight: 720,
-    class: 'Sultan Class',
-    image: '/assets/sapi2.jpg'
-  }
-]
+// Generate link WhatsApp
+const generateWhatsAppLink = (item) => {
+  const text = `Halo, saya tertarik untuk memesan sapi ${item.jenis_sapi} (${item.kategori}) dengan berat ${item.berat_sapi}kg. Apakah masih tersedia?`;
+  return `https://wa.me/6282127590547?text=${encodeURIComponent(text)}`;
+};
 
 // Filter berdasarkan kategori aktif
-const filteredItems = computed(() =>
-  sapiItems.filter((item) => item.class === selectedCategory.value)
-)
+const filteredItems = computed(() => {
+  if (!selectedCategory.value) return sapiItems.value;
+  return sapiItems.value.filter(
+    (item) => item.kategori === selectedCategory.value
+  );
+});
+
+// Fetch data dari API
+const fetchData = async () => {
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const response = await axios.get("http://localhost:8000/api/hewan-kurban");
+    sapiItems.value = response.data.data;
+
+    // Extract unique categories
+    const uniqueCategories = [
+      ...new Set(sapiItems.value.map((item) => item.kategori)),
+    ];
+    categories.value = uniqueCategories;
+
+    // Set default selected category
+    if (uniqueCategories.length > 0) {
+      selectedCategory.value = uniqueCategories[0];
+    }
+  } catch (err) {
+    error.value = "Gagal memuat data. Silakan coba lagi nanti.";
+    console.error("Error fetching data:", err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Fetch data when component mounts
+onMounted(() => {
+  fetchData();
+});
 </script>
