@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HewanKurbanController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Admin\ResellerController;
 
 // Authentication Routes
 Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
@@ -18,6 +19,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ->name('hewan-kurban.photo.delete');
     Route::delete('admin/hewan-kurban/photo/{id}', [HewanKurbanController::class, 'deletePhoto'])->name('admin.hewan-kurban.photo.delete');
 });
+
+Route::get('/admin/reseller', [ResellerController::class, 'index'])->name('admin.reseller');
 
 // Redirect root ke login
 Route::get('/', function () {

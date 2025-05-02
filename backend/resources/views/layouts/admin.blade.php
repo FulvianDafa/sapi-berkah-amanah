@@ -37,6 +37,10 @@
                    class="flex items-center px-5 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all {{ Request::routeIs('admin.hewan-kurban.*') ? 'bg-slate-700 text-white' : '' }}">
                     <i class="fas fa-cow mr-2"></i> Hewan Kurban
                 </a>
+                <a href="{{ route('admin.reseller') }}" 
+                   class="flex items-center px-5 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all {{ Request::routeIs('admin.reseller') ? 'bg-slate-700 text-white' : '' }}">
+                    <i class="fas fa-user mr-2"></i> Reseller
+                </a>
             </div>
         </div>
 
