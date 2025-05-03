@@ -335,4 +335,33 @@ class HewanKurbanController extends Controller
             ], 500);
         }
     }
+
+    public function show($id)
+    {
+        try {
+            $item = HewanKurban::with('photos')->findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id' => $item->id,
+                    'jenis_sapi' => $item->jenis_sapi,
+                    'kategori' => $item->kategori,
+                    'berat_sapi' => $item->berat,
+                    'harga' => $item->harga,
+                    'deskripsi' => $item->deskripsi,
+                    'photos' => $item->photos->map(function ($photo) {
+                        return $photo->url;
+                    })->toArray(),
+                    'video_url' => $item->video_url,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak ditemukan',
+                'error' => $e->getMessage()
+            ], 404);
+        }
+    }
 }

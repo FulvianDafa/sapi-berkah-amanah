@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Endpoint untuk katalog hewan kurban
 Route::get('/hewan-kurban', [HewanKurbanController::class, 'getKatalog']);
 
+Route::get('/hewan-kurban/{id}', [HewanKurbanController::class, 'show']);
+
 Route::post('/daftar-reseller', [ResellerController::class, 'store']);
 
 

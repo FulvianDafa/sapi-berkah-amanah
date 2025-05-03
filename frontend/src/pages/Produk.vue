@@ -1,6 +1,18 @@
 <template>
   <div class="min-h-screen flex flex-col bg-white">
     <Navbar />
+    <!-- Breadcrumb -->
+<nav class="text-sm text-gray-500 py-2 px-6 bg-gray-100" aria-label="Breadcrumb">
+  <ol class="flex items-center space-x-1">
+    <li>
+      <router-link to="/" class="text-green-700 hover:underline">Home</router-link>
+    </li>
+    <li>
+      <span class="text-gray-400">›</span>
+    </li>
+    <span class="text-gray-700 font-medium">Katalog</span>
+  </ol>
+</nav>
 
     <div class="flex-1 p-8">
       <h1 class="text-3xl font-bold text-center mb-8">Katalog Sapi</h1>
@@ -38,9 +50,10 @@
 
         <!-- Grid Item Sapi -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 min-h-[300px]">
-          <div
+          <router-link
             v-for="item in paginatedItems"
             :key="item.id"
+            :to="`/produk/${item.id}`"
             class="p-4 bg-green-50 rounded-lg shadow hover:shadow-md transition"
           >
             <img
@@ -66,10 +79,11 @@
               :href="generateWhatsAppLink(item)"
               target="_blank"
               class="mt-4 inline-block bg-green-600 text-white text-sm px-4 py-2 rounded-full hover:bg-green-700 transition"
+              @click.stop
             >
               Booking via WhatsApp
             </a>
-          </div>
+          </router-link>
           <!-- Placeholder jika kosong -->
           <template v-if="paginatedItems.length === 0">
             <div class="col-span-3 flex flex-col items-center justify-center min-h-[200px]">
@@ -201,11 +215,6 @@ const fetchData = async () => {
       ...new Set(sapiItems.value.map((item) => item.kategori)),
     ];
     categories.value = uniqueCategories;
-
-    // Set default selected category
-    if (uniqueCategories.length > 0) {
-      selectedCategory.value = uniqueCategories[0];
-    }
   } catch (err) {
     error.value = "Gagal memuat data. Silakan coba lagi nanti.";
     console.error("Error fetching data:", err);
