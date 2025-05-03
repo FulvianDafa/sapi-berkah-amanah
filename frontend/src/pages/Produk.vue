@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-white">
+  <div class="min-h-screen flex flex-col bg-white">
     <Navbar />
 
-    <div class="p-8">
+    <div class="flex-1 p-8">
       <h1 class="text-3xl font-bold text-center mb-8">Katalog Sapi</h1>
 
       <!-- Loading State -->
@@ -22,8 +22,8 @@
         <!-- Tab Kategori -->
         <div class="flex flex-wrap justify-center space-x-4 border-b pb-2 mb-6">
           <button
-            v-for="(cat, index) in categories"
-            :key="index"
+            v-for="cat in categories"
+            :key="cat"
             @click="selectedCategory = cat"
             :class="[
               'text-lg font-semibold pb-2',
@@ -37,9 +37,9 @@
         </div>
 
         <!-- Grid Item Sapi -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 min-h-[300px]">
           <div
-            v-for="item in filteredItems"
+            v-for="item in paginatedItems"
             :key="item.id"
             class="p-4 bg-green-50 rounded-lg shadow hover:shadow-md transition"
           >
@@ -70,7 +70,55 @@
               Booking via WhatsApp
             </a>
           </div>
+          <!-- Placeholder jika kosong -->
+          <template v-if="paginatedItems.length === 0">
+            <div class="col-span-3 flex flex-col items-center justify-center min-h-[200px]">
+              <span class="text-center text-gray-500">Kategori kosong</span>
+            </div>
+          </template>
         </div>
+
+        <!-- Pagination -->
+        <nav v-if="filteredItems.length > itemsPerPage" class="flex justify-center mt-8" aria-label="Page navigation example">
+          <ul class="flex items-center -space-x-px h-8 text-sm">
+            <li>
+              <button
+                @click="goToPage(currentPage - 1)"
+                :disabled="currentPage === 1"
+                class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              >
+                <span class="sr-only">Previous</span>
+                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                </svg>
+              </button>
+            </li>
+            <li v-for="page in totalPages" :key="page">
+              <button
+                @click="goToPage(page)"
+                :aria-current="currentPage === page ? 'page' : undefined"
+                :class="[
+                  'flex items-center justify-center px-3 h-8 leading-tight border',
+                  currentPage === page
+                    ? 'z-10 text-blue-600 border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700'
+                    : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'
+                ]"
+              >{{ page }}</button>
+            </li>
+            <li>
+              <button
+                @click="goToPage(currentPage + 1)"
+                :disabled="currentPage === totalPages"
+                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              >
+                <span class="sr-only">Next</span>
+                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
     <Footer />
@@ -78,7 +126,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import Navbar from "../components/Navbar.vue";
 import Footer from "../components/Footer.vue";
@@ -86,8 +134,15 @@ import Footer from "../components/Footer.vue";
 const loading = ref(false);
 const error = ref(null);
 const sapiItems = ref([]);
-const selectedCategory = ref(null);
-const categories = ref([]);
+
+// Kategori statis
+const categories = [
+  "Semua",
+  "Prime Class",
+  "Bigboss Class",
+  "Sultan Class"
+];
+const selectedCategory = ref("Semua");
 
 // Format harga ke format Rupiah
 const formatPrice = (price) => {
@@ -102,11 +157,35 @@ const generateWhatsAppLink = (item) => {
 
 // Filter berdasarkan kategori aktif
 const filteredItems = computed(() => {
-  if (!selectedCategory.value) return sapiItems.value;
+  if (selectedCategory.value === "Semua") return sapiItems.value;
+  const map = {
+    "Prime Class": "prime",
+    "Bigboss Class": "bigboss",
+    "Sultan Class": "sultan"
+  };
   return sapiItems.value.filter(
-    (item) => item.kategori === selectedCategory.value
+    (item) => item.kategori === map[selectedCategory.value]
   );
 });
+
+const itemsPerPage = 6;
+const currentPage = ref(1);
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredItems.value.length / itemsPerPage);
+});
+
+const paginatedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredItems.value.slice(start, start + itemsPerPage);
+});
+
+function goToPage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
 
 // Fetch data dari API
 const fetchData = async () => {
@@ -138,5 +217,10 @@ const fetchData = async () => {
 // Fetch data when component mounts
 onMounted(() => {
   fetchData();
+});
+
+// Reset currentPage when selectedCategory changes
+watch(selectedCategory, () => {
+  currentPage.value = 1;
 });
 </script>

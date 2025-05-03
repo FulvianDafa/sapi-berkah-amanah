@@ -3,7 +3,7 @@
     <div class="container mx-auto flex items-center justify-between">
       <!-- Logo + Menu -->
       <div class="flex items-center space-x-10">
-        <h1 class="text-xl font-bold">Sapi Berkah Amanah</h1>
+        <img :src="logo" alt="Sapi Berkah Amanah" class="h-10 w-auto" />
 
         <ul class="hidden md:flex space-x-6 items-center">
           <li><router-link to="/" class="hover:text-green-200">Home</router-link></li>
@@ -87,6 +87,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import logo from '../assets/logo.png'
 
 const menuOpen = ref(false)
 
