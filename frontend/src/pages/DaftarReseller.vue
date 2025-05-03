@@ -5,12 +5,6 @@
     <h1 class="text-3xl font-bold mb-8 text-green-700">
       Form Pendaftaran Reseller
     </h1>
-    <button
-      @click="goBack"
-      class="mt-6 text-sm text-green-700 hover:underline hover:text-green-900 transition"
-    >
-      ←
-    </button>
     <form
       @submit.prevent="handleSubmit"
       class="bg-white p-6 rounded-lg shadow-md w-full max-w-xl space-y-4"
@@ -94,22 +88,58 @@
         </div>
       </div>
 
-      <button
-        type="submit"
-        class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
-      >
-        Daftar Sekarang
-      </button>
+      <div class="flex gap-4">
+        <button
+          type="submit"
+          class="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+        >
+          Daftar Sekarang
+        </button>
+        <button
+          type="button"
+          @click="showCancelConfirm = true"
+          class="flex-1 bg-gray-200 text-gray-700 py-2 rounded hover:bg-gray-300 transition"
+        >
+          Cancel
+        </button>
+      </div>
     </form>
 
-    <!-- Tombol Kembali -->
+    <!-- Popup Konfirmasi -->
+    <!-- Popup Konfirmasi (Modern + UX klik luar untuk tutup) -->
+<div
+  v-if="showCancelConfirm"
+  @click.self="showCancelConfirm = false"
+  class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/30 z-50 transition"
+>
+  <div class="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full text-center">
+    <p class="mb-6 text-lg font-medium text-gray-800">Yakin ingin membatalkan pendaftaran?</p>
+    <div class="flex justify-center gap-4">
+      <button
+        @click="cancelForm"
+        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+      >
+        Ya
+      </button>
+      <button
+        @click="showCancelConfirm = false"
+        class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition"
+      >
+        Tidak
+      </button>
+    </div>
   </div>
+</div>
+
+  </div>
+  <Footer />
+
 </template>
 
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-
+import Footer from "../components/Footer.vue";
 const router = useRouter();
 
 const form = reactive({
@@ -123,6 +153,7 @@ const form = reactive({
 });
 
 const punyaRekening = ref("tidak");
+const showCancelConfirm = ref(false);
 
 // Aksi ketika submit form
 const handleSubmit = async () => {
@@ -153,8 +184,8 @@ const handleSubmit = async () => {
   }
 };
 
-// Fungsi tombol kembali
-const goBack = () => {
+const cancelForm = () => {
+  showCancelConfirm.value = false;
   router.back();
 };
 </script>
