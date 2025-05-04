@@ -19,9 +19,7 @@
         >
           <!-- Icon -->
           <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-green-100 p-3 rounded-full shadow">
-            <svg class="w-6 h-6 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+            <img :src="item.icon" alt="Icon" class="w-12 h-12" />
           </div>
 
           <h3 class="text-lg font-bold text-green-800 mt-4">{{ item.title }}</h3>
@@ -103,12 +101,12 @@ import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 
 const keunggulan = [
-  { title: 'Amanah', desc: 'Sapi dari peternak terpercaya dan jujur.' },
-  { title: 'Kesehatan Terjamin', desc: 'Diperiksa dan divaksin oleh dokter hewan.' },
-  { title: 'Kualitas Sapi Terbaik', desc: 'Bobot dan jenis sapi diseleksi dengan ketat.' },
-  { title: 'Harga Termasuk Ongkir', desc: 'Sudah termasuk pengiriman wilayah Jabodetabek.' },
-  { title: 'Gratis Ongkir', desc: 'Wilayah tertentu mendapatkan pengiriman gratis.' },
-  { title: 'Layanan After Sales', desc: 'Bantuan kurban, video penyembelihan, dll.' }
+  { title: 'Amanah', desc: 'Sapi dari peternak terpercaya dan jujur.', icon: 'src/assets/icons/trusted.gif' },
+  { title: 'Kesehatan Terjamin', desc: 'Diperiksa dan divaksin oleh dokter hewan.', icon: 'src/assets/icons/healthy.gif' },
+  { title: 'Kualitas Sapi Terbaik', desc: 'Bobot dan jenis sapi diseleksi dengan ketat.', icon: 'src/assets/icons/quality.gif' },
+  { title: 'Harga Termasuk Ongkir', desc: 'Sudah termasuk pengiriman wilayah Jabodetabek.', icon: 'src/assets/icons/shipping.gif' },
+  { title: 'Gratis Ongkir', desc: 'Wilayah tertentu mendapatkan pengiriman gratis.', icon: 'src/assets/icons/ongkir.gif' },
+  { title: 'Layanan After Sales', desc: 'Bantuan kurban, video penyembelihan, dll.', icon: 'src/assets/icons/after.gif' }
 ]
 
 const galeri = [
