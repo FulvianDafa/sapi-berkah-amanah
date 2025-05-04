@@ -7,36 +7,8 @@
 
         <ul class="hidden md:flex space-x-6 items-center">
           <li><router-link to="/" class="hover:text-green-200">Home</router-link></li>
-
-          <!-- Program Dropdown with Delay -->
-          <li
-            class="relative"
-            @mouseenter="openProgram"
-            @mouseleave="closeProgramWithDelay"
-          >
-            <button class="hover:text-green-200 flex items-center">
-              Program
-              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <ul
-              v-show="isProgramOpen"
-              class="absolute bg-white text-green-700 shadow-lg mt-2 rounded-md transition-all duration-200 ease-out z-50"
-              @mouseenter="cancelClose"
-              @mouseleave="closeProgramWithDelay"
-            >
-              <li>
-                <router-link to="/daftarreseller" class="block px-4 py-2 hover:bg-green-100">Daftar Reseller</router-link>
-              </li>
-              <li>
-                <a href="https://forms.gle/link-titip-sapi" target="_blank" class="block px-4 py-2 hover:bg-green-100">Daftar Titip Sapi</a>
-              </li>
-            </ul>
-          </li>
-
           <li><router-link to="/produk" class="hover:text-green-200">Katalog</router-link></li>
+          <li><router-link to="/daftarreseller" class="hover:text-green-200">Daftar Reseller</router-link></li>
           <li><router-link to="/faq" class="hover:text-green-200">FAQ</router-link></li>
         </ul>
       </div>
@@ -67,7 +39,6 @@
         <ul class="flex flex-col space-y-2 p-4">
           <li><router-link @click="menuOpen = false" to="/">Home</router-link></li>
           <li><router-link @click="menuOpen = false" to="/daftarreseller">Daftar Reseller</router-link></li>
-          <li><a @click="menuOpen = false" href="https://forms.gle/link-titip-sapi" target="_blank">Daftar Titip Sapi</a></li>
           <li><router-link @click="menuOpen = false" to="/produk">Katalog</router-link></li>
           <li><router-link @click="menuOpen = false" to="/faq">FAQ</router-link></li>
           <li>
@@ -91,24 +62,7 @@ import logo from '../assets/logo.png'
 
 const menuOpen = ref(false)
 
-// Dropdown Program Hover Delay Logic
-const isProgramOpen = ref(false)
-let programCloseTimeout = null
 
-const openProgram = () => {
-  isProgramOpen.value = true
-  clearTimeout(programCloseTimeout)
-}
-
-const closeProgramWithDelay = () => {
-  programCloseTimeout = setTimeout(() => {
-    isProgramOpen.value = false
-  }, 300) // delay 300ms
-}
-
-const cancelClose = () => {
-  clearTimeout(programCloseTimeout)
-}
 </script>
 
 <style scoped>
