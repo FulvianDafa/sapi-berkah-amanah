@@ -20,7 +20,7 @@
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-8">
         <div
-          class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"
+          class="animate-spin duration-900 rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"
         ></div>
         <p class="mt-4 text-gray-600">Memuat data...</p>
       </div>
