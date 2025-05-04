@@ -27,12 +27,6 @@
           <h3 class="text-lg font-bold text-green-800 mt-4">{{ item.title }}</h3>
           <p class="text-gray-600 text-sm mt-2">{{ item.desc }}</p>
 
-          <!-- Optional Arrow -->
-          <div class="mt-6">
-            <button class="text-green-700 hover:text-green-900 transition">
-              →
-            </button>
-          </div>
         </div>
       </div>
     </section>
