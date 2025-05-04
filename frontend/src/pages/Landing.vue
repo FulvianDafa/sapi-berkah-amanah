@@ -18,7 +18,7 @@
           class="relative bg-white rounded-xl shadow-lg p-6 pt-12 transition-transform hover:-translate-y-1 hover:shadow-xl"
         >
           <!-- Icon -->
-          <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-green-100 p-3 rounded-full shadow">
+          <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white-100 p-3 rounded-full shadow">
             <img :src="item.icon" alt="Icon" class="w-12 h-12" />
           </div>
 
