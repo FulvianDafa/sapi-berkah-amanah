@@ -216,7 +216,7 @@ const handleSubmit = async () => {
       }),
     });
     // Redirect ke grup WA
-    window.location.href = "https://chat.whatsapp.com/GRUP_LINK";
+    window.location.href = "https://chat.whatsapp.com/LyNfB43cenIJKc8jZMATlq";
   } catch (e) {
     alert("Gagal mengirim data. Coba lagi.");
   }

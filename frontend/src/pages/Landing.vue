@@ -3,9 +3,10 @@
     <Navbar />
 
     <!-- Hero Section -->
-    <section 
-      class="relative h-[90vh] flex flex-col justify-center items-center text-white text-center bg-cover bg-center" 
-      :style="`background-image: url(${heroImg})`">
+    <section
+      class="relative h-[90vh] flex flex-col justify-center items-center text-white text-center bg-cover bg-center"
+      :style="{ backgroundImage: `url(${heroImage})` }"
+    >
       <h1 class="text-5xl md:text-6xl font-bold drop-shadow-lg">Sapi Berkah Amanah</h1>
       <p class="text-2xl mt-4 drop-shadow-lg">Menjual sapi kurban terpercaya</p>
     </section>
@@ -23,10 +24,8 @@
           <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white-100 p-3 rounded-full shadow">
             <img :src="item.icon" alt="Icon" class="w-12 h-12" />
           </div>
-
           <h3 class="text-lg font-bold text-green-800 mt-4">{{ item.title }}</h3>
           <p class="text-gray-600 text-sm mt-2">{{ item.desc }}</p>
-
         </div>
       </div>
     </section>
@@ -35,7 +34,13 @@
     <section class="py-16 bg-green-50 text-center">
       <h2 class="text-3xl font-bold mb-10">Galeri Sapi Amanah</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-20">
-        <img v-for="(foto, index) in galeri" :key="index" :src="foto" class="rounded-lg shadow-lg object-cover h-60 w-full" alt="Foto Sapi" />
+        <img
+          v-for="(foto, index) in galeri"
+          :key="index"
+          :src="foto"
+          class="rounded-lg shadow-lg object-cover h-60 w-full"
+          alt="Foto Sapi"
+        />
       </div>
     </section>
 
@@ -46,7 +51,7 @@
         <!-- Kiri: Gambar + Overlay Box -->
         <div class="relative w-full md:w-1/2">
           <img
-            :src="ctaImg"
+            :src="ctaImage"
             alt="Sapi Berkah Amanah"
             class="rounded-2xl shadow-lg object-cover w-full h-[350px]"
           />
@@ -81,7 +86,7 @@
           <div class="text-2xl font-bold text-green-700 mb-4">Ada Pertanyaan ?</div>
 
           <a
-            href="https://wa.me/6281234567890?text=Halo%20saya%20mau%20cek%20katalog%20sapi"
+            href="https://wa.me/62811440944?text=Halo%20saya%20mau%20cek%20katalog%20sapi"
             target="_blank"
             class="flex items-center justify-center bg-white text-green-700 py-2 px-6 rounded-full shadow hover:bg-green-50"
           >
@@ -102,34 +107,46 @@
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 
-// Import semua gambar
-import heroImg from '../assets/hero-sapi.jpg'
-import ctaImg from '../assets/galeri-sapi.jpg'
-import sapi1 from '../assets/sapi1.jpg'
-import sapi2 from '../assets/sapi2.jpg'
-import sapi3 from '../assets/sapi3.jpg'
-
-// Import icons
-import trustedIcon from '../assets/icons/trusted.gif'
-import healthyIcon from '../assets/icons/healthy.gif'
-import qualityIcon from '../assets/icons/quality.gif'
-import shippingIcon from '../assets/icons/shipping.gif'
-import ongkirIcon from '../assets/icons/ongkir.gif'
-import afterIcon from '../assets/icons/after.gif'
+const heroImage = new URL('@/assets/hero-sapi.jpg', import.meta.url).href
+const ctaImage = new URL('@/assets/galeri-sapi.jpg', import.meta.url).href
 
 const keunggulan = [
-  { title: 'Amanah', desc: 'Sapi dari peternak terpercaya dan jujur.', icon: trustedIcon },
-  { title: 'Kesehatan Terjamin', desc: 'Diperiksa dan divaksin oleh dokter hewan.', icon: healthyIcon },
-  { title: 'Kualitas Sapi Terbaik', desc: 'Bobot dan jenis sapi diseleksi dengan ketat.', icon: qualityIcon },
-  { title: 'Harga Termasuk Ongkir', desc: 'Sudah termasuk pengiriman wilayah Jabodetabek.', icon: shippingIcon },
-  { title: 'Gratis Ongkir', desc: 'Wilayah tertentu mendapatkan pengiriman gratis.', icon: ongkirIcon },
-  { title: 'Layanan After Sales', desc: 'Bantuan kurban, video penyembelihan, dll.', icon: afterIcon }
+  {
+    title: 'Amanah',
+    desc: 'Sapi dari peternak terpercaya dan jujur.',
+    icon: new URL('@/assets/icons/trusted.gif', import.meta.url).href
+  },
+  {
+    title: 'Kesehatan Terjamin',
+    desc: 'Diperiksa dan divaksin oleh dokter hewan.',
+    icon: new URL('@/assets/icons/healthy.gif', import.meta.url).href
+  },
+  {
+    title: 'Kualitas Sapi Terbaik',
+    desc: 'Bobot dan jenis sapi diseleksi dengan ketat.',
+    icon: new URL('@/assets/icons/quality.gif', import.meta.url).href
+  },
+  {
+    title: 'Harga Termasuk Ongkir',
+    desc: 'Sudah termasuk pengiriman wilayah Jabodetabek.',
+    icon: new URL('@/assets/icons/shipping.gif', import.meta.url).href
+  },
+  {
+    title: 'Gratis Ongkir',
+    desc: 'Wilayah tertentu mendapatkan pengiriman gratis.',
+    icon: new URL('@/assets/icons/ongkir.gif', import.meta.url).href
+  },
+  {
+    title: 'Layanan After Sales',
+    desc: 'Bantuan kurban, video penyembelihan, dll.',
+    icon: new URL('@/assets/icons/after.gif', import.meta.url).href
+  }
 ]
 
 const galeri = [
-  sapi1,
-  sapi2,
-  sapi3
+  new URL('@/assets/sapi1.jpg', import.meta.url).href,
+  new URL('@/assets/sapi2.jpg', import.meta.url).href,
+  new URL('@/assets/sapi3.jpg', import.meta.url).href
 ]
 </script>
 

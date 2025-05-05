@@ -16,7 +16,7 @@
       <!-- Tombol Booking WA (desktop kanan) -->
       <div class="hidden md:block">
         <a
-          href="https://wa.me/6282127590547?text=Halo%20saya%20mau%20booking%20sapi%20kurban"
+          href="https://wa.me/62811440944?text=Halo%20saya%20mau%20booking%20sapi%20kurban"
           target="_blank"
           class="bg-white text-green-700 font-semibold px-4 py-2 rounded hover:bg-green-100"
         >
@@ -43,7 +43,7 @@
           <li><router-link @click="menuOpen = false" to="/faq">FAQ</router-link></li>
           <li>
             <a
-              href="https://wa.me/6282127590547?text=Halo%20saya%20mau%20booking%20sapi%20kurban"
+              href="https://wa.me/62811440944?text=Halo%20saya%20mau%20booking%20sapi%20kurban"
               target="_blank"
               class="block mt-2 bg-white text-green-700 py-2 text-center rounded hover:bg-green-100"
             >
