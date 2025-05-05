@@ -170,8 +170,9 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Footer from "../components/Footer.vue";
-const router = useRouter();
+import axios from "../services/axiosConfig";
 
+const router = useRouter();
 const isLoading = ref(true);
 
 onMounted(() => {
@@ -201,22 +202,18 @@ const handleSubmit = async () => {
   }
 
   try {
-    await fetch("http://localhost:8000/api/daftar-reseller", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        nama: form.nama,
-        wa: form.wa,
-        profesi: form.profesi,
-        alamat: form.alamat,
-        punyaRekening: punyaRekening.value,
-        bank: punyaRekening.value === "ya" ? form.bank : "",
-        norek: punyaRekening.value === "ya" ? form.norek : "",
-        atasNama: punyaRekening.value === "ya" ? form.atasNama : "",
-      }),
+    await axios.post("/daftar-reseller", {
+      nama: form.nama,
+      wa: form.wa,
+      profesi: form.profesi,
+      alamat: form.alamat,
+      punyaRekening: punyaRekening.value,
+      bank: punyaRekening.value === "ya" ? form.bank : "",
+      norek: punyaRekening.value === "ya" ? form.norek : "",
+      atasNama: punyaRekening.value === "ya" ? form.atasNama : "",
     });
     // Redirect ke grup WA
-    window.location.href = "https://chat.whatsapp.com/LyNfB43cenIJKc8jZMATlq";
+    window.location.href = "https://chat.whatsapp.com/GRUP_LINK";
   } catch (e) {
     alert("Gagal mengirim data. Coba lagi.");
   }
