@@ -2,23 +2,22 @@
   <div class="bg-white min-h-screen font-sans">
     <Navbar />
 
-<!-- Breadcrumb -->
-<nav class="text-sm text-gray-500 py-2 px-6 bg-gray-100" aria-label="Breadcrumb">
-  <ol class="flex items-center space-x-1">
-    <li>
-      <router-link to="/" class="text-green-700 hover:underline">Home</router-link>
-    </li>
-    <li>
-      <span class="text-gray-400">›</span>
-    </li>
-    <router-link to="/produk" class="text-green-700 hover:underline">Katalog</router-link>
-    <li>
-      <span class="text-gray-400">›</span>
-    </li>
-    <li class="text-gray-700 font-medium">Detail Sapi</li>
-  </ol>
-</nav>
-
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 py-2 px-6 bg-gray-100" aria-label="Breadcrumb">
+      <ol class="flex items-center space-x-1">
+        <li>
+          <router-link to="/" class="text-green-700 hover:underline">Home</router-link>
+        </li>
+        <li>
+          <span class="text-gray-400">›</span>
+        </li>
+        <router-link to="/produk" class="text-green-700 hover:underline">Katalog</router-link>
+        <li>
+          <span class="text-gray-400">›</span>
+        </li>
+        <li class="text-gray-700 font-medium">Detail Sapi</li>
+      </ol>
+    </nav>
 
     <div class="container mx-auto px-6 py-10 flex flex-col md:flex-row gap-10">
       <!-- Gambar sapi -->
@@ -32,16 +31,29 @@
           />
         </div>
 
-        <!-- Thumbnail -->
+        <!-- Thumbnail media -->
         <div class="flex space-x-3 mt-4">
-          <img
+          <div
             v-for="(media, index) in sapiMedia"
             :key="index"
-            :src="!isVideo(media) ? media : '/assets/video-thumbnail.jpg'"
-            @click="currentIndex = index"
-            class="w-20 h-20 object-cover rounded border cursor-pointer"
+            class="w-20 h-20 rounded border cursor-pointer overflow-hidden"
             :class="currentIndex === index ? 'border-green-600' : 'border-gray-300'"
-          />
+            @click="currentIndex = index"
+          >
+            <img
+              v-if="!isVideo(media)"
+              :src="media"
+              class="w-full h-full object-cover"
+            />
+            <video
+              v-else
+              :src="media"
+              class="w-full h-full object-cover"
+              muted
+              loop
+              playsinline
+            ></video>
+          </div>
         </div>
       </div>
 
@@ -75,6 +87,7 @@
     <Footer />
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
