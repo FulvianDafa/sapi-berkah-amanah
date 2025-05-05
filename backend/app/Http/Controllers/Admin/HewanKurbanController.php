@@ -65,7 +65,7 @@ class HewanKurbanController extends Controller
         DB::beginTransaction();
         try {
             // Tentukan kategori berdasarkan harga
-            $kategori = $this->determineKategori($request->harga);
+            $kategori = $this->determineKategori($request->berat);
 
             // Upload video jika ada
             $videoUrl = null;
@@ -137,13 +137,13 @@ class HewanKurbanController extends Controller
     }
 
     // Tambahkan method untuk menentukan kategori
-    private function determineKategori($harga)
+    private function determineKategori($berat)
     {
-        if ($harga >= 50000000) { // 50 juta ke atas
+        if ($berat >= 700) { 
             return 'sultan';
-        } elseif ($harga >= 25000000) { // 25-50 juta
+        } elseif ($berat >= 500) { 
             return 'bigboss';
-        } else { // di bawah 25 juta
+        } else { 
             return 'prime';
         }
     }
@@ -171,7 +171,7 @@ class HewanKurbanController extends Controller
             $hewanKurban = HewanKurban::findOrFail($id);
             
             // Tentukan kategori berdasarkan harga baru
-            $kategori = $this->determineKategori($request->harga);
+            $kategori = $this->determineKategori($request->berat);
 
             // Update video jika ada
             if ($request->hasFile('video')) {
