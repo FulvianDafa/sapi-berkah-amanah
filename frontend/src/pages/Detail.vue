@@ -94,7 +94,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
-import axios from 'axios'
+import axios from '../services/axiosConfig'
 
 const route = useRoute()
 const sapiId = route.params.id
@@ -113,7 +113,7 @@ const generateWhatsAppLink = (item) => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`http://localhost:8000/api/hewan-kurban/${sapiId}`)
+    const response = await axios.get(`/hewan-kurban/${sapiId}`)
     sapi.value = response.data.data
     sapiMedia.value = [
       ...(sapi.value.photos || []),

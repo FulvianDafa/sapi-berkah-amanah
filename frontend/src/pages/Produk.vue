@@ -141,7 +141,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
-import axios from "axios";
+import axios from "../services/axiosConfig";
 import Navbar from "../components/Navbar.vue";
 import Footer from "../components/Footer.vue";
 
@@ -207,7 +207,7 @@ const fetchData = async () => {
   error.value = null;
 
   try {
-    const response = await axios.get("http://localhost:8000/api/hewan-kurban");
+    const response = await axios.get("/hewan-kurban");
     sapiItems.value = response.data.data;
 
     // Extract unique categories
