@@ -95,7 +95,7 @@ const videoAttrs = { controls: true }
 
 const generateWhatsAppLink = (item) => {
   const text = `Halo, saya tertarik untuk memesan sapi ${item.jenis_sapi} (${item.kategori}) dengan berat ${item.berat_sapi ?? item.berat}kg. Apakah masih tersedia?`;
-  return `https://wa.me/6282127590547?text=${encodeURIComponent(text)}`;
+  return `https://wa.me/62811440944?text=${encodeURIComponent(text)}`;
 };
 
 onMounted(async () => {

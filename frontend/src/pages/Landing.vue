@@ -86,7 +86,7 @@
           <div class="text-2xl font-bold text-green-700 mb-4">Ada Pertanyaan ?</div>
 
           <a
-            href="https://wa.me/6281234567890?text=Halo%20saya%20mau%20cek%20katalog%20sapi"
+            href="https://wa.me/62811440944?text=Halo%20saya%20mau%20cek%20katalog%20sapi"
             target="_blank"
             class="flex items-center justify-center bg-white text-green-700 py-2 px-6 rounded-full shadow hover:bg-green-50"
           >

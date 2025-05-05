@@ -166,7 +166,7 @@ const formatPrice = (price) => {
 // Generate link WhatsApp
 const generateWhatsAppLink = (item) => {
   const text = `Halo, saya tertarik untuk memesan sapi ${item.jenis_sapi} (${item.kategori}) dengan berat ${item.berat_sapi}kg. Apakah masih tersedia?`;
-  return `https://wa.me/6282127590547?text=${encodeURIComponent(text)}`;
+  return `https://wa.me/62811440944?text=${encodeURIComponent(text)}`;
 };
 
 // Filter berdasarkan kategori aktif
