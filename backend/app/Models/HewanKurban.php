@@ -18,6 +18,10 @@ class HewanKurban extends Model
         'status'
     ];
 
+    protected $casts = [
+        'umur' => 'float',
+    ];
+
     // Konstanta untuk range harga
     const KATEGORI_RANGES = [
         'prime' => ['min' => 0, 'max' => 25000000],
@@ -26,19 +30,19 @@ class HewanKurban extends Model
     ];
 
     // Method untuk otomatis set kategori berdasarkan harga
-    public function setHargaAttribute($value)
-    {
-        $this->attributes['harga'] = $value;
-        
-        // Set kategori otomatis berdasarkan harga
-        if ($value <= self::KATEGORI_RANGES['prime']['max']) {
-            $this->attributes['kategori'] = 'prime';
-        } elseif ($value <= self::KATEGORI_RANGES['bigboss']['max']) {
-            $this->attributes['kategori'] = 'bigboss';
-        } else {
-            $this->attributes['kategori'] = 'sultan';
-        }
-    }
+    // public function setHargaAttribute($value)
+    // {
+    //     $this->attributes['harga'] = $value;
+    //     
+    //     // Set kategori otomatis berdasarkan harga
+    //     if ($value <= self::KATEGORI_RANGES['prime']['max']) {
+    //         $this->attributes['kategori'] = 'prime';
+    //     } elseif ($value <= self::KATEGORI_RANGES['bigboss']['max']) {
+    //         $this->attributes['kategori'] = 'bigboss';
+    //     } else {
+    //         $this->attributes['kategori'] = 'sultan';
+    //     }
+    // }
 
     // Scope untuk filter berdasarkan kategori
     public function scopeKategori($query, $kategori)

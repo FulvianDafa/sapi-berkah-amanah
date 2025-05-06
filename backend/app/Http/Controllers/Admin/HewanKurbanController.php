@@ -53,7 +53,7 @@ class HewanKurbanController extends Controller
     {
         $request->validate([
             'jenis_sapi' => 'required|string|max:255',
-            'umur' => 'required|integer|min:1',
+            'umur' => 'required|numeric|min:0.1',
             'berat' => 'required|integer|min:1',
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
@@ -158,7 +158,7 @@ class HewanKurbanController extends Controller
     {
         $request->validate([
             'jenis_sapi' => 'required|string|max:255',
-            'umur' => 'required|integer|min:1',
+            'umur' => 'required|numeric|min:0.1',
             'berat' => 'required|integer|min:1',
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',

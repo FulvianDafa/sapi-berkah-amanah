@@ -53,6 +53,7 @@
                                     <input type="number" 
                                            name="umur" 
                                            id="umur" 
+                                           step="0.1"
                                            value="{{ old('umur', $hewanKurban->umur ?? '') }}"
                                            class="block w-full rounded-lg border-gray-300 py-3 px-4 pr-12 focus:border-indigo-500 focus:ring-indigo-500"
                                            required>
