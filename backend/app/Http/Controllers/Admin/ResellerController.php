@@ -11,7 +11,11 @@ class ResellerController extends Controller
     public function index()
     {
         // Ganti URL di bawah dengan URL Web App Apps Script kamu
-        $response = Http::get('https://script.google.com/macros/s/AKfycbzP6ym1ybtYs_7qucriVoS9r5Pp-iqpgBliJVRq-RqOJBLm8-GJHOFNLfDKfK00rmns/exec');
+        $response = Http::withHeaders([
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0'
+        ])->get('https://script.google.com/macros/s/AKfycbwS2F9Ogkhpdv3QP4m78fNtvFX6kn7Ia5Oo8wUcJJ74GwLavMSwmJlha309wdTULPX5/exec');
         $resellers = $response->json();
 
         return view('admin.reseller.reseller', compact('resellers'));

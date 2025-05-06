@@ -22,7 +22,11 @@ class ResellerController extends Controller
         ]);
 
         // Kirim ke Google Apps Script
-        $response = Http::post('https://script.google.com/macros/s/AKfycbzP6ym1ybtYs_7qucriVoS9r5Pp-iqpgBliJVRq-RqOJBLm8-GJHOFNLfDKfK00rmns/exec', $validated);
+        $response = Http::withHeaders([
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0'
+        ])->post('https://script.google.com/macros/s/AKfycbwS2F9Ogkhpdv3QP4m78fNtvFX6kn7Ia5Oo8wUcJJ74GwLavMSwmJlha309wdTULPX5/exec', $validated);
 
         if ($response->successful()) {
             return response()->json(['success' => true]);
