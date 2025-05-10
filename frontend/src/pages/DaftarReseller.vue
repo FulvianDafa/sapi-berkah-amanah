@@ -45,6 +45,7 @@
           v-model="form.nama"
           type="text"
           required
+          placeholder="Masukkan nama lengkap Anda"
           class="w-full p-2 border rounded"
         />
       </div>
@@ -55,6 +56,7 @@
           v-model="form.wa"
           type="tel"
           required
+          placeholder="Contoh: 081234567890"
           class="w-full p-2 border rounded"
           @input="form.wa = form.wa.replace(/\D/g, '')"
         />
@@ -66,6 +68,7 @@
           v-model="form.profesi"
           type="text"
           required
+          placeholder="Masukkan profesi Anda"
           class="w-full p-2 border rounded"
         />
       </div>
@@ -75,6 +78,7 @@
         <textarea
           v-model="form.alamat"
           required
+          placeholder="Masukkan alamat lengkap Anda"
           class="w-full p-2 border rounded"
         ></textarea>
       </div>
@@ -95,6 +99,7 @@
           <input
             v-model="form.bank"
             type="text"
+            placeholder="Contoh: BCA, BRI, Mandiri"
             class="w-full p-2 border rounded"
           />
         </div>
@@ -104,6 +109,7 @@
           <input
             v-model="form.norek"
             type="text"
+            placeholder="Masukkan nomor rekening Anda"
             class="w-full p-2 border rounded"
             @input="form.norek = form.norek.replace(/\D/g, '')"
           />
@@ -114,6 +120,7 @@
           <input
             v-model="form.atasNama"
             type="text"
+            placeholder="Nama pemilik rekening"
             class="w-full p-2 border rounded"
           />
         </div>
@@ -223,7 +230,7 @@ const handleSubmit = async () => {
 
   try {
     isLoading.value = true;
-    
+
     await axios.post("/daftar-reseller", {
       nama: form.nama,
       wa: form.wa,
@@ -255,6 +262,7 @@ const handleSubmit = async () => {
     window.location.href = "https://chat.whatsapp.com/LyNfB43cenIJKc8jZMATlq";
   } catch (e) {
     alert("Gagal mengirim data. Coba lagi.");
+    isLoading.value = false;
   }
 };
 
