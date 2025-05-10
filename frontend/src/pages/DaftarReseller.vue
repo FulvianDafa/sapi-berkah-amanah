@@ -202,6 +202,8 @@ const handleSubmit = async () => {
   }
 
   try {
+    isLoading.value = true;
+    
     await axios.post("/daftar-reseller", {
       nama: form.nama,
       wa: form.wa,
@@ -212,6 +214,23 @@ const handleSubmit = async () => {
       norek: punyaRekening.value === "ya" ? form.norek : "",
       atasNama: punyaRekening.value === "ya" ? form.atasNama : "",
     });
+
+    // Reset form field
+    form.nama = "";
+    form.wa = "";
+    form.profesi = "";
+    form.alamat = "";
+    form.bank = "";
+    form.norek = "";
+    form.atasNama = "";
+    punyaRekening.value = "tidak";
+    
+    // Loading false
+    isLoading.value = false;
+
+    // Alert pendaftaran berhasil
+    alert("Pendaftaran berhasil. Silakan cek grup WA untuk informasi lebih lanjut.");
+
     // Redirect ke grup WA
     window.location.href = "https://chat.whatsapp.com/LyNfB43cenIJKc8jZMATlq";
   } catch (e) {
