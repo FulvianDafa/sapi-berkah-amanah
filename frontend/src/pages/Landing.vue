@@ -8,7 +8,7 @@
       :style="{ backgroundImage: `url(${heroImage})` }"
     >
       <h1 class="text-5xl md:text-6xl font-bold drop-shadow-lg">Sapi Berkah Amanah</h1>
-      <p class="text-2xl mt-4 drop-shadow-lg">Menjual sapi kurban terpercaya</p>
+      <p class="text-2xl mt-4 drop-shadow-lg">Menjual sapi kurban terpercaya dengan kualitas terjamin</p>
     </section>
 
     <!-- Keunggulan Section -->
@@ -113,32 +113,32 @@ const ctaImage = new URL('@/assets/galeri-sapi.jpg', import.meta.url).href
 const keunggulan = [
   {
     title: 'Amanah',
-    desc: 'Sapi dari peternak terpercaya dan jujur.',
+    desc: 'Sapi dari peternak terpercaya dan jujur di Wilayah Jawa Tengah.',
     icon: new URL('@/assets/icons/trusted.gif', import.meta.url).href
   },
   {
-    title: 'Kesehatan Terjamin',
+    title: 'Kesehatan',
     desc: 'Diperiksa dan divaksin oleh dokter hewan.',
     icon: new URL('@/assets/icons/healthy.gif', import.meta.url).href
   },
   {
-    title: 'Kualitas Sapi Terbaik',
+    title: 'Kualitas ',
     desc: 'Bobot dan jenis sapi diseleksi dengan ketat.',
     icon: new URL('@/assets/icons/quality.gif', import.meta.url).href
   },
   {
-    title: 'Harga Termasuk Ongkir',
-    desc: 'Sudah termasuk pengiriman wilayah Jabodetabek.',
+    title: 'Harga ',
+    desc: 'Lebih Murah dari Harga Pasaran dan Sudah termasuk ongkos pengiriman untuk wilayah Jabodetabek.',
     icon: new URL('@/assets/icons/shipping.gif', import.meta.url).href
   },
   {
-    title: 'Gratis Ongkir',
-    desc: 'Wilayah tertentu mendapatkan pengiriman gratis.',
+    title: 'Pengalaman',
+    desc: 'Sapi Berkah Amanah telah berpengalaman dalam menyediakan sapi qurban selama 5 tahun ke berbagai lokasi di Pulau Jawa, dengan konsumen meliputi pejabat tinggi negara.',
     icon: new URL('@/assets/icons/ongkir.gif', import.meta.url).href
   },
   {
-    title: 'Layanan After Sales',
-    desc: 'Bantuan kurban, video penyembelihan, dll.',
+    title: 'Purna Jual',
+    desc: 'Dokumentasi berupa foto dan video serta pengiriman fitur berbagi lokasi (Share Location) saat tiba di lokasi.',
     icon: new URL('@/assets/icons/after.gif', import.meta.url).href
   }
 ]

@@ -1,36 +1,36 @@
 <template>
-    <div
-  v-if="isLoading"
-  class="fixed inset-0 flex items-center justify-center bg-white z-50"
->
-  <div class="flex flex-col items-center gap-4">
-    <svg
-      class="animate-spin h-10 w-10 text-green-600"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <circle
-        class="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4"
-      ></circle>
-      <path
-        class="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-      ></path>
-    </svg>
-    <span class="text-green-600 font-semibold">Memuat Halaman...</span>
+  <div
+    v-if="isLoading"
+    class="fixed inset-0 flex items-center justify-center bg-white z-50"
+  >
+    <div class="flex flex-col items-center gap-4">
+      <svg
+        class="animate-spin h-10 w-10 text-green-600"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+        ></path>
+      </svg>
+      <span class="text-green-600 font-semibold">Memuat Halaman...</span>
+    </div>
   </div>
-</div>
 
   <div
-  v-else
-  class="min-h-screen flex flex-col items-center justify-center bg-green-50 px-4 py-10"
+    v-else
+    class="min-h-screen flex flex-col items-center justify-center bg-green-50 px-4 py-10"
   >
     <h1 class="text-3xl font-bold mb-8 text-green-700">
       Form Pendaftaran Reseller
@@ -56,6 +56,7 @@
           type="tel"
           required
           class="w-full p-2 border rounded"
+          @input="form.wa = form.wa.replace(/\D/g, '')"
         />
       </div>
 
@@ -79,16 +80,15 @@
       </div>
 
       <div>
-        <label class="block font-semibold mb-1"
-          >Apakah Anda punya rekening?</label
-        >
+        <label class="block font-semibold mb-1">
+          Apakah Anda punya rekening?
+        </label>
         <select v-model="punyaRekening" class="w-full p-2 border rounded">
           <option value="tidak">Tidak</option>
           <option value="ya">Ya</option>
         </select>
       </div>
 
-      <!-- Tampilkan jika punya rekening -->
       <div v-if="punyaRekening === 'ya'" class="space-y-4">
         <div>
           <label class="block font-semibold mb-1">Nama Bank</label>
@@ -105,6 +105,7 @@
             v-model="form.norek"
             type="text"
             class="w-full p-2 border rounded"
+            @input="form.norek = form.norek.replace(/\D/g, '')"
           />
         </div>
 
@@ -136,34 +137,34 @@
     </form>
 
     <!-- Popup Konfirmasi -->
-    <!-- Popup Konfirmasi (Modern + UX klik luar untuk tutup) -->
-<div
-  v-if="showCancelConfirm"
-  @click.self="showCancelConfirm = false"
-  class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/30 z-50 transition"
->
-  <div class="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full text-center">
-    <p class="mb-6 text-lg font-medium text-gray-800">Yakin ingin membatalkan pendaftaran?</p>
-    <div class="flex justify-center gap-4">
-      <button
-        @click="cancelForm"
-        class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-      >
-        Ya
-      </button>
-      <button
-        @click="showCancelConfirm = false"
-        class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition"
-      >
-        Tidak
-      </button>
+    <div
+      v-if="showCancelConfirm"
+      @click.self="showCancelConfirm = false"
+      class="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-white/30 z-50 transition"
+    >
+      <div class="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full text-center">
+        <p class="mb-6 text-lg font-medium text-gray-800">
+          Yakin ingin membatalkan pendaftaran?
+        </p>
+        <div class="flex justify-center gap-4">
+          <button
+            @click="cancelForm"
+            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+          >
+            Ya
+          </button>
+          <button
+            @click="showCancelConfirm = false"
+            class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition"
+          >
+            Tidak
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-  </div>
   <Footer />
-
 </template>
 
 <script setup>
@@ -178,7 +179,7 @@ const isLoading = ref(true);
 onMounted(() => {
   setTimeout(() => {
     isLoading.value = false;
-  }, 900); // estimasi waktu load
+  }, 900);
 });
 
 const form = reactive({
@@ -194,10 +195,29 @@ const form = reactive({
 const punyaRekening = ref("tidak");
 const showCancelConfirm = ref(false);
 
-// Aksi ketika submit form
 const handleSubmit = async () => {
   if (!form.nama || !form.wa || !form.profesi || !form.alamat) {
     alert("Silakan isi semua data yang wajib.");
+    return;
+  }
+
+  if (!/^\d+$/.test(form.wa)) {
+    alert("Nomor WhatsApp harus berupa angka.");
+    return;
+  }
+
+  if (punyaRekening.value === "ya" && form.norek && !/^\d+$/.test(form.norek)) {
+    alert("Nomor Rekening harus berupa angka.");
+    return;
+  }
+
+  if (!/^\d+$/.test(form.wa)) {
+    alert("Nomor WhatsApp harus berupa angka.");
+    return;
+  }
+
+  if (punyaRekening.value === "ya" && form.norek && !/^\d+$/.test(form.norek)) {
+    alert("Nomor Rekening harus berupa angka.");
     return;
   }
 
