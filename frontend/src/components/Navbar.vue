@@ -34,8 +34,8 @@
     </div>
 
     <!-- Mobile Menu -->
-    <transition name="slide-fade">
-      <div v-if="menuOpen" class="md:hidden bg-green-600">
+    <transition name="slide-fade" >
+      <div v-if="menuOpen" class="md:hidden bg-green-600 mt-6">
         <ul class="flex flex-col space-y-2 p-4">
           <li><router-link @click="menuOpen = false" to="/">Home</router-link></li>
           <li><router-link @click="menuOpen = false" to="/daftarreseller">Daftar Reseller</router-link></li>

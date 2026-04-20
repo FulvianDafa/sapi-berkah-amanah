@@ -4,11 +4,20 @@
 
     <!-- Hero Section -->
     <section
-      class="relative h-[90vh] flex flex-col justify-center items-center text-white text-center bg-cover bg-center"
+      class="relative h-[90vh] text-white bg-cover bg-center"
       :style="{ backgroundImage: `url(${heroImage})` }"
     >
-      <h1 class="text-5xl md:text-6xl font-bold drop-shadow-lg">Sapi Berkah Amanah</h1>
-      <p class="text-2xl mt-4 drop-shadow-lg">Menjual sapi kurban terpercaya dengan kualitas terjamin</p>
+    <div class="bg-gradient-to-r from-black/55 lg:from-black/90 to-black/55 lg:to-black/20 
+      flex flex-col justify-center items-center text-center lg:items-start lg:text-left lg:text-left 
+      h-full w-full p-10 sm:p-15 md:p-20 lg:pr-100">
+      <h1 class="leading-none text-[50px] sm:text-[80px] md:text-[100px] lg:text-[120px] font-bold drop-shadow-lg">SAPI BERKAH AMANAH</h1>
+      <p class="text-xl md:text-2xl mt-4 drop-shadow-lg">Menjual sapi kurban terpercaya dengan kualitas terjamin</p>
+      <div class="mt-10">
+          <router-link to="/produk" class="text-bold bg-green-700 p-5 rounded-lg hover:bg-green-800 duration-300">
+            BELI SEKARANG
+          </router-link>
+      </div>
+    </div>
     </section>
 
     <!-- Keunggulan Section -->
