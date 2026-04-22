@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class HewanKurban extends Model
 {
     protected $fillable = [
-        'jenis_sapi',
+        'jenis_hewan',
+        'nama',
         'umur',
         'berat',
         'harga',
@@ -29,20 +30,23 @@ class HewanKurban extends Model
         'sultan' => ['min' => 50000001, 'max' => PHP_FLOAT_MAX]
     ];
 
-    // Method untuk otomatis set kategori berdasarkan harga
-    // public function setHargaAttribute($value)
-    // {
-    //     $this->attributes['harga'] = $value;
-    //     
-    //     // Set kategori otomatis berdasarkan harga
-    //     if ($value <= self::KATEGORI_RANGES['prime']['max']) {
-    //         $this->attributes['kategori'] = 'prime';
-    //     } elseif ($value <= self::KATEGORI_RANGES['bigboss']['max']) {
-    //         $this->attributes['kategori'] = 'bigboss';
-    //     } else {
-    //         $this->attributes['kategori'] = 'sultan';
-    //     }
-    // }
+    // Boot method untuk event model
+    protected static function booted()
+    {
+        static::saving(function ($hewan) {
+            if ($hewan->jenis_hewan === 'sapi' && $hewan->berat) {
+                if ($hewan->berat >= 700) {
+                    $hewan->kategori = 'sultan';
+                } elseif ($hewan->berat >= 500) {
+                    $hewan->kategori = 'bigboss';
+                } else {
+                    $hewan->kategori = 'prime';
+                }
+            } elseif ($hewan->jenis_hewan === 'kambing') {
+                $hewan->kategori = null;
+            }
+        });
+    }
 
     // Scope untuk filter berdasarkan kategori
     public function scopeKategori($query, $kategori)

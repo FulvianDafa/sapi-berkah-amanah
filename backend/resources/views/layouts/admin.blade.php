@@ -5,179 +5,210 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - Admin Sapi Berkah Amanah</title>
-    
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Dropzone CSS -->
-    <link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" rel="stylesheet">
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
     <!-- SweetAlert2 -->
-    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui@4/material-ui.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-minimal@4/minimal.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     @stack('styles')
 </head>
-<body class="bg-gray-100">
-    <div class="flex min-h-screen" id="wrapper">
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper" class="fixed w-64 min-h-screen bg-slate-800 transition-all duration-300 z-20">
-            <div class="flex items-center p-4 text-xl font-bold text-white bg-slate-900">
-                <i class="fas fa-mosque mr-2"></i>
-                Admin Panel
-            </div>
-            <div class="flex flex-col">
-                <a href="{{ route('admin.dashboard') }}" 
-                   class="flex items-center px-5 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all {{ Request::routeIs('admin.dashboard') ? 'bg-slate-700 text-white' : '' }}">
-                    <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
-                </a>
-                <a href="{{ route('admin.hewan-kurban.index') }}" 
-                   class="flex items-center px-5 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all {{ Request::routeIs('admin.hewan-kurban.*') ? 'bg-slate-700 text-white' : '' }}">
-                    <i class="fas fa-cow mr-2"></i> Hewan Kurban
-                </a>
-                <a href="{{ route('admin.reseller') }}" 
-                   class="flex items-center px-5 py-4 text-gray-300 hover:bg-slate-700 hover:text-white transition-all {{ Request::routeIs('admin.reseller') ? 'bg-slate-700 text-white' : '' }}">
-                    <i class="fas fa-user mr-2"></i> Reseller
-                </a>
-            </div>
-        </div>
+<body class="bg-gray-50 antialiased">
+    <div class="min-h-screen" id="wrapper">
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper" class="ml-64 w-[calc(100%-16rem)] transition-all duration-300">
-            <!-- Navbar -->
-            <nav class="bg-white shadow-md sticky top-0 z-10">
-                <div class="px-4 py-3">
-                    <div class="flex justify-between items-center">
-                        <button id="sidebarToggle" class="text-gray-600 hover:text-gray-900 focus:outline-none">
-                            <i class="fas fa-bars text-xl"></i>
-                        </button>
-                        <div class="relative">
-                            <button class="flex items-center text-gray-700 hover:text-gray-900 focus:outline-none">
-                                <span class="mr-2">Admin</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <!-- Dropdown menu -->
-                            <div class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
-                                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
-                                <hr class="my-2 border-gray-200">
-                                <form action="{{ route('logout') }}" method="POST" class="block">
-                                    @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                        Logout
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- ════════════════════════════ -->
+        <!-- SIDEBAR                      -->
+        <!-- ════════════════════════════ -->
+        <aside id="sidebar"
+               class="fixed inset-y-0 left-0 z-40 w-60 flex flex-col
+                      bg-gradient-to-b from-green-950 to-green-900
+                      transition-transform duration-300 ease-in-out
+                      -translate-x-full">
+
+            <!-- Brand -->
+            <div class="flex items-center gap-2.5 px-5 h-16 shrink-0">
+                <span class="text-white font-semibold tracking-wide">ADMIN SBA</span>
+            </div>
+
+            <!-- Nav -->
+            <nav class="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
+                <a href="{{ route('admin.dashboard') }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors
+                          {{ Request::routeIs('admin.dashboard')
+                              ? 'bg-white/10 text-white'
+                              : 'text-green-300/70 hover:bg-white/5 hover:text-white' }}">
+                    <i class="fas fa-th-large w-4 text-center text-[11px]"></i>
+                    Dashboard
+                </a>
+                <a href="{{ route('admin.hewan-kurban.index') }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors
+                          {{ Request::routeIs('admin.hewan-kurban.*')
+                              ? 'bg-white/10 text-white'
+                              : 'text-green-300/70 hover:bg-white/5 hover:text-white' }}">
+                    <i class="fas fa-cow w-4 text-center text-[11px]"></i>
+                    Hewan Kurban
+                </a>
+                <a href="{{ route('admin.reseller') }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors
+                          {{ Request::routeIs('admin.reseller')
+                              ? 'bg-white/10 text-white'
+                              : 'text-green-300/70 hover:bg-white/5 hover:text-white' }}">
+                    <i class="fas fa-users w-4 text-center text-[11px]"></i>
+                    Reseller
+                </a>
             </nav>
 
-            <!-- Main Content -->
-            <main class="p-6">
+            <!-- Footer -->
+            <div class="px-4 py-3 border-t border-white/5">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                            class="flex items-center gap-2 w-full px-2 py-1.5 text-[12px] text-green-400/60 hover:text-red-400 rounded transition-colors">
+                        <i class="fas fa-sign-out-alt w-4 text-center text-[11px]"></i>
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Mobile overlay -->
+        <div id="sidebar-overlay"
+             class="fixed inset-0 z-30 bg-black/30 hidden lg:hidden"
+             onclick="closeSidebar()"></div>
+
+        <!-- ════════════════════════════ -->
+        <!-- MAIN AREA                    -->
+        <!-- ════════════════════════════ -->
+        <div id="main" class="lg:ml-60 min-h-screen flex flex-col transition-all duration-300">
+
+            <!-- Top bar -->
+            <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-lg border-b border-gray-100 h-14 flex items-center px-4 sm:px-6 shrink-0">
+                <button id="menuBtn" onclick="toggleSidebar()"
+                        class="w-8 h-8 flex items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors lg:hidden">
+                    <i class="fas fa-bars text-sm" id="menuIcon"></i>
+                </button>
+
+                <!-- Desktop toggle -->
+                <button id="desktopMenuBtn" onclick="toggleDesktop()"
+                        class="hidden lg:flex w-8 h-8 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors">
+                    <i class="fas fa-bars text-sm"></i>
+                </button>
+
+                <span class="ml-3 text-sm font-semibold text-gray-800 hidden sm:inline">@yield('title')</span>
+
+                <div class="ml-auto flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-full bg-green-600 flex items-center justify-center text-white text-[11px] font-bold">A</div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <main class="flex-1 p-4 sm:p-6">
                 @if(session('success'))
-                    <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded relative" role="alert">
-                        <div class="flex">
-                            <i class="fas fa-check-circle mt-1 mr-2"></i>
-                            <div>
-                                {{ session('success') }}
-                            </div>
-                        </div>
-                        <button type="button" class="absolute top-0 right-0 mt-4 mr-4 text-green-700 hover:text-green-900" onclick="this.parentElement.remove()">
-                            <i class="fas fa-times"></i>
-                        </button>
+                    <div id="flash-success"
+                         class="mb-5 flex items-center gap-3 p-3 rounded-lg bg-green-50 border border-green-100 text-green-700 text-sm" role="alert">
+                        <i class="fas fa-check-circle text-green-500 text-sm shrink-0"></i>
+                        <span class="flex-1">{{ session('success') }}</span>
+                        <button onclick="this.parentElement.remove()" class="text-green-400 hover:text-green-600"><i class="fas fa-times text-xs"></i></button>
                     </div>
                 @endif
-
                 @if(session('error'))
-                    <div class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded relative" role="alert">
-                        <div class="flex">
-                            <i class="fas fa-exclamation-circle mt-1 mr-2"></i>
-                            <div>
-                                {{ session('error') }}
-                            </div>
-                        </div>
-                        <button type="button" class="absolute top-0 right-0 mt-4 mr-4 text-red-700 hover:text-red-900" onclick="this.parentElement.remove()">
-                            <i class="fas fa-times"></i>
-                        </button>
+                    <div id="flash-error"
+                         class="mb-5 flex items-center gap-3 p-3 rounded-lg bg-red-50 border border-red-100 text-red-700 text-sm" role="alert">
+                        <i class="fas fa-exclamation-circle text-red-500 text-sm shrink-0"></i>
+                        <span class="flex-1">{{ session('error') }}</span>
+                        <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600"><i class="fas fa-times text-xs"></i></button>
                     </div>
                 @endif
-
                 @yield('content')
             </main>
+
+            <footer class="px-6 py-3 text-center text-[11px] text-gray-400 border-t border-gray-50">
+                &copy; {{ date('Y') }} Sapi Berkah Amanah
+            </footer>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // Sidebar toggle
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            const wrapper = document.getElementById('wrapper');
-            const sidebar = document.getElementById('sidebar-wrapper');
-            const content = document.getElementById('page-content-wrapper');
-            
-            wrapper.classList.toggle('sidebar-hidden');
-            
-            if (wrapper.classList.contains('sidebar-hidden')) {
-                sidebar.classList.add('-translate-x-full');
-                content.classList.remove('ml-64');
-                content.classList.add('ml-0', 'w-full');
-            } else {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const main = document.getElementById('main');
+        let desktopVisible = true;
+
+        function applySidebarState(visible) {
+            desktopVisible = visible;
+            if (visible) {
                 sidebar.classList.remove('-translate-x-full');
-                content.classList.add('ml-64', 'w-[calc(100%-16rem)]');
-                content.classList.remove('ml-0', 'w-full');
+                main.classList.add('lg:ml-60');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                main.classList.remove('lg:ml-60');
             }
-        });
+        }
 
-        // Dropdown toggle with improved accessibility
-        const dropdownButton = document.querySelector('button.flex.items-center');
-        const dropdownMenu = document.querySelector('.hidden.absolute');
-        
-        dropdownButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('hidden');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', () => {
-            if (!dropdownMenu.classList.contains('hidden')) {
-                dropdownMenu.classList.add('hidden');
+        // On load: restore saved state on desktop, hide on mobile
+        function initSidebar() {
+            if (window.innerWidth >= 1024) {
+                const saved = localStorage.getItem('sidebarVisible');
+                applySidebarState(saved === null ? true : saved === 'true');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                desktopVisible = true; // reset for when they go back to desktop
             }
-        });
+        }
+        initSidebar();
 
-        // Close alerts with animation
-        const alerts = document.querySelectorAll('[role="alert"]');
-        alerts.forEach(alert => {
-            const closeButton = alert.querySelector('button');
-            if (closeButton) {
-                closeButton.addEventListener('click', () => {
-                    alert.classList.add('opacity-0', 'transition-opacity', 'duration-300');
-                    setTimeout(() => alert.remove(), 300);
-                });
+        // Mobile: open/close with overlay
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+        function toggleSidebar() {
+            if (sidebar.classList.contains('-translate-x-full')) {
+                openSidebar();
+            } else {
+                closeSidebar();
             }
+        }
+
+        // Desktop: toggle sidebar + persist state
+        function toggleDesktop() {
+            desktopVisible = !desktopVisible;
+            localStorage.setItem('sidebarVisible', desktopVisible);
+            applySidebarState(desktopVisible);
+        }
+
+        // Auto-dismiss flash
+        document.querySelectorAll('[id^="flash-"]').forEach(el => {
+            setTimeout(() => {
+                el.style.transition = 'opacity .3s';
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            }, 4000);
         });
     </script>
 
     @if(session('success'))
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Toast.fire({
-                icon: 'success',
-                title: "{{ session('success') }}"
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.mixin({ toast:true, position:'top-end', showConfirmButton:false, timer:3000, timerProgressBar:true })
+                .fire({ icon:'success', title:"{{ session('success') }}" });
         });
     </script>
     @endif
-
     @if(session('error'))
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Toast.fire({
-                icon: 'error',
-                title: "{{ session('error') }}"
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.mixin({ toast:true, position:'top-end', showConfirmButton:false, timer:3000, timerProgressBar:true })
+                .fire({ icon:'error', title:"{{ session('error') }}" });
         });
     </script>
     @endif
