@@ -17,7 +17,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('hewan-kurban', HewanKurbanController::class);
     Route::delete('hewan-kurban/photo/{id}', [HewanKurbanController::class, 'deletePhoto'])
         ->name('hewan-kurban.photo.delete');
-    Route::delete('admin/hewan-kurban/photo/{id}', [HewanKurbanController::class, 'deletePhoto'])->name('admin.hewan-kurban.photo.delete');
 });
 
 Route::get('/admin/reseller', [ResellerController::class, 'index'])->name('admin.reseller');

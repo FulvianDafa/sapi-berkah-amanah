@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Create axios instance
 const axiosInstance = axios.create({
-  baseURL: "https://adminsapiberkahamanahadmin.sapiberkahamanah.com/api",
+  baseURL: "http://localhost:8000/api",
   withCredentials: false,
   headers: {
     "Content-Type": "application/json",
