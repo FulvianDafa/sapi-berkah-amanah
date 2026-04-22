@@ -21,9 +21,10 @@ class HewanKurbanController extends Controller
             $hewanKurban = $this->hewanKurbanService->getKatalog()->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'jenis_sapi' => $item->jenis_sapi,
+                    'jenis_hewan' => $item->jenis_hewan,
+                    'nama' => $item->nama,
                     'kategori' => $item->kategori,
-                    'berat_sapi' => $item->berat,
+                    'berat' => $item->berat, // kita perbarui key API-nya agar masuk akal
                     'harga' => $item->harga,
                     'photos' => $item->photos->map(function ($photo) {
                         return $photo->url;
@@ -53,9 +54,10 @@ class HewanKurbanController extends Controller
                 'success' => true,
                 'data' => [
                     'id' => $item->id,
-                    'jenis_sapi' => $item->jenis_sapi,
+                    'jenis_hewan' => $item->jenis_hewan,
+                    'nama' => $item->nama,
                     'kategori' => $item->kategori,
-                    'berat_sapi' => $item->berat,
+                    'berat' => $item->berat,
                     'harga' => $item->harga,
                     'deskripsi' => $item->deskripsi,
                     'photos' => $item->photos->map(function ($photo) {

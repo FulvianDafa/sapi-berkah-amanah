@@ -53,9 +53,11 @@ class HewanKurbanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jenis_sapi' => 'required|string|max:255',
-            'umur' => 'required|numeric|min:0.1',
-            'berat' => 'required|integer|min:1',
+            'jenis_hewan' => 'required|in:sapi,kambing',
+            'nama' => 'required|string|max:255',
+            'umur' => 'nullable|numeric|min:0.1',
+            'berat' => 'nullable|integer|min:1',
+            'kategori' => 'nullable|in:prime,bigboss,sultan',
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
             'photos' => 'required_without:photo_ids|array|min:1|max:5',
@@ -65,7 +67,7 @@ class HewanKurbanController extends Controller
 
         try {
             $this->hewanKurbanService->createHewanKurban(
-                $request->only(['jenis_sapi', 'umur', 'berat', 'harga', 'deskripsi']),
+                $request->only(['jenis_hewan', 'nama', 'umur', 'berat', 'kategori', 'harga', 'deskripsi']),
                 $request->file('photos'),
                 $request->file('video')
             );
@@ -89,9 +91,11 @@ class HewanKurbanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'jenis_sapi' => 'required|string|max:255',
-            'umur' => 'required|numeric|min:0.1',
-            'berat' => 'required|integer|min:1',
+            'jenis_hewan' => 'required|in:sapi,kambing',
+            'nama' => 'required|string|max:255',
+            'umur' => 'nullable|numeric|min:0.1',
+            'berat' => 'nullable|integer|min:1',
+            'kategori' => 'nullable|in:prime,bigboss,sultan',
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
             'photos.*' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
@@ -102,7 +106,7 @@ class HewanKurbanController extends Controller
             $hewanKurban = HewanKurban::findOrFail($id);
             $this->hewanKurbanService->updateHewanKurban(
                 $hewanKurban,
-                $request->only(['jenis_sapi', 'umur', 'berat', 'harga', 'deskripsi']),
+                $request->only(['jenis_hewan', 'nama', 'umur', 'berat', 'kategori', 'harga', 'deskripsi']),
                 $request->file('photos'),
                 $request->file('video')
             );

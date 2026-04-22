@@ -32,31 +32,46 @@
                     <div class="p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-6">Informasi Utama</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Jenis Sapi -->
-                            <div class="col-span-2">
-                                <label for="jenis_sapi" class="block text-sm font-medium text-gray-700 mb-2">Jenis Sapi</label>
+                            <!-- Jenis Hewan -->
+                            <div>
+                                <label for="jenis_hewan" class="block text-sm font-medium text-gray-700 mb-2">Jenis Hewan</label>
+                                <select name="jenis_hewan" 
+                                        id="jenis_hewan" 
+                                        class="block w-full rounded-lg border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        required
+                                        onchange="toggleOptionalLabels()">
+                                    <option value="sapi" {{ old('jenis_hewan', $hewanKurban->jenis_hewan ?? 'sapi') == 'sapi' ? 'selected' : '' }}>Sapi</option>
+                                    <option value="kambing" {{ old('jenis_hewan', $hewanKurban->jenis_hewan ?? '') == 'kambing' ? 'selected' : '' }}>Kambing</option>
+                                </select>
+                                @error('jenis_hewan')
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Nama Hewan -->
+                            <div>
+                                <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama/Julukan Hewan</label>
                                 <input type="text" 
-                                       name="jenis_sapi" 
-                                       id="jenis_sapi" 
-                                       value="{{ old('jenis_sapi', $hewanKurban->jenis_sapi ?? '') }}"
+                                       name="nama" 
+                                       id="nama" 
+                                       value="{{ old('nama', $hewanKurban->nama ?? '') }}"
                                        class="block w-full rounded-lg border-gray-300 py-3 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                        required>
-                                @error('jenis_sapi')
+                                @error('nama')
                                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Umur -->
                             <div>
-                                <label for="umur" class="block text-sm font-medium text-gray-700 mb-2">Umur</label>
+                                <label for="umur" id="label_umur" class="block text-sm font-medium text-gray-700 mb-2">Umur <span class="opt_text hidden font-normal text-gray-500">(Opsional)</span></label>
                                 <div class="relative rounded-lg shadow-sm">
                                     <input type="number" 
                                            name="umur" 
                                            id="umur" 
                                            step="0.1"
                                            value="{{ old('umur', $hewanKurban->umur ?? '') }}"
-                                           class="block w-full rounded-lg border-gray-300 py-3 px-4 pr-12 focus:border-indigo-500 focus:ring-indigo-500"
-                                           required>
+                                           class="block w-full rounded-lg border-gray-300 py-3 px-4 pr-12 focus:border-indigo-500 focus:ring-indigo-500">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                         <span class="text-gray-500 sm:text-sm">Tahun</span>
                                     </div>
@@ -68,14 +83,13 @@
 
                             <!-- Berat -->
                             <div>
-                                <label for="berat" class="block text-sm font-medium text-gray-700 mb-2">Berat</label>
+                                <label for="berat" id="label_berat" class="block text-sm font-medium text-gray-700 mb-2">Berat <span class="opt_text hidden font-normal text-gray-500">(Opsional)</span></label>
                                 <div class="relative rounded-lg shadow-sm">
                                     <input type="number" 
                                            name="berat" 
                                            id="berat" 
                                            value="{{ old('berat', $hewanKurban->berat ?? '') }}"
-                                           class="block w-full rounded-lg border-gray-300 py-3 px-4 pr-12 focus:border-indigo-500 focus:ring-indigo-500"
-                                           required>
+                                           class="block w-full rounded-lg border-gray-300 py-3 px-4 pr-12 focus:border-indigo-500 focus:ring-indigo-500">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                         <span class="text-gray-500 sm:text-sm">Kg</span>
                                     </div>
@@ -221,6 +235,24 @@
 
 @push('scripts')
 <script>
+// Fungsi toggle label untuk opsional
+function toggleOptionalLabels() {
+    const jenis = document.getElementById('jenis_hewan').value;
+    const isKambing = jenis === 'kambing';
+    
+    document.querySelectorAll('.opt_text').forEach(el => {
+        if (isKambing) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+    });
+
+    document.getElementById('umur').required = !isKambing;
+    document.getElementById('berat').required = !isKambing;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    toggleOptionalLabels();
+});
+
 // Ganti Toast menjadi Swal.fire untuk notifikasi
 const Toast = Swal.mixin({
     toast: true,

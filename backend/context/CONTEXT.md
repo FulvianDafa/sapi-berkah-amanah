@@ -87,11 +87,12 @@ backend/
 - Traits: `HasApiTokens` (Sanctum)
 
 ### `HewanKurban`
-- **Atribut Utama**: `jenis_sapi`, `umur`, `berat`, `harga`, `kategori`, `deskripsi`
+- **Atribut Utama**: `jenis_hewan` (enum: sapi/kambing), `nama`, `umur` (nullable), `berat` (nullable), `harga`, `kategori` (nullable), `deskripsi`
 - **Business Logic Event**: Event `saving` akan otomatis menghitung kategori berdasarkan nilai input `berat`:
   - **prime**: berat < 500 kg
   - **bigboss**: berat 500–699 kg
   - **sultan**: berat ≥ 700 kg
+  - *Pengecualian:* Logika ini **hanya** berlaku jika `jenis_hewan === 'sapi'`. Jika kambing, nilai `kategori` akan diset paksa menjadi `null`.
 - **Relasi**: `hasMany(HewanKurbanPhoto::class)`
 
 ### `HewanKurbanPhoto`
@@ -140,5 +141,5 @@ Library Cloudinary sekarang memakai 2 instance. Walaupun ini kurang optimal (bla
 
 ---
 
-## Status Terakhir (Akhir Fase Cleanup)
-- **Refactoring CLEANUP Selesai:** Controller Web/API sudah displit, Logika Kategori di Model, Implementasi Service Class, Autentikasi API mandiri menggunakan tipe Token, dan bug/prefix unused dihapus. Aplikasi siap masuk ke implementasi **Fase 1**.
+## Status Terakhir (Akhir Fase 1)
+- **FASE 1 Selesai:** Sistem telah mendukung fungsionalitas "Kambing". Skema database telah dimodifikasi menggunakan parameter `nullable` untuk kolom `berat`/`umur`/`kategori`. Model telah memiliki handling otomatis *nulled-category* khusus tipe kambing. Blade view admin dan endpoint API katalog sudah menggunakan kombinasi kolom `nama` & `jenis_hewan`. Aplikasi siap masuk ke implementasi **Fase 2** (Sistem Role & Crud Reseller).

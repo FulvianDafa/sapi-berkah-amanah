@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class HewanKurban extends Model
 {
     protected $fillable = [
-        'jenis_sapi',
+        'jenis_hewan',
+        'nama',
         'umur',
         'berat',
         'harga',
@@ -33,12 +34,16 @@ class HewanKurban extends Model
     protected static function booted()
     {
         static::saving(function ($hewan) {
-            if ($hewan->berat >= 700) {
-                $hewan->kategori = 'sultan';
-            } elseif ($hewan->berat >= 500) {
-                $hewan->kategori = 'bigboss';
-            } else {
-                $hewan->kategori = 'prime';
+            if ($hewan->jenis_hewan === 'sapi' && $hewan->berat) {
+                if ($hewan->berat >= 700) {
+                    $hewan->kategori = 'sultan';
+                } elseif ($hewan->berat >= 500) {
+                    $hewan->kategori = 'bigboss';
+                } else {
+                    $hewan->kategori = 'prime';
+                }
+            } elseif ($hewan->jenis_hewan === 'kambing') {
+                $hewan->kategori = null;
             }
         });
     }

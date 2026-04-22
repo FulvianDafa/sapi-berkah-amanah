@@ -2,11 +2,9 @@
 1. Hapus boilerplate auth tidak terpakai (Folder Auth/ & routes/auth.php dihapus)
 2. Fix bug route double prefix (Fix pada routes/web.php bagian admin.hewan-kurban.photo.delete)
 3. Pisah Web Controller & API Controller (Membuat Api\HewanKurbanController & Api\AuthController; logika CRUD dipindah ke Service Pattern)
-
-[ FASE 1 ]
-4. Migrasi: tambah jenis_hewan, rename jenis_sapi → nama, nullable berat/umur/kategori
-5. Sesuaikan Controller + API untuk handle sapi & kambing
-6. Update UI admin untuk tambah/edit kambing
+4. Migrasi: tambah jenis_hewan, rename jenis_sapi → nama, nullable berat/umur/kategori (Selesai dengan MySQL modifier via doctrine)
+5. Sesuaikan Controller + API untuk handle sapi & kambing (Validasi disesuaikan, kategori dibiarkan null untuk kambing)
+6. Update UI admin untuk tambah/edit kambing (Dropdown enum, label constraint dinamis, UI badge pembeda di index)
 
 [ FASE 2 ]
 7. Migrasi: is_admin → role enum('admin', 'reseller')

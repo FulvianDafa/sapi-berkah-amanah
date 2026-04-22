@@ -40,9 +40,11 @@ class HewanKurbanService
 
             // Simpan data
             $hewanKurban = HewanKurban::create([
-                'jenis_sapi' => $data['jenis_sapi'],
-                'umur' => $data['umur'],
-                'berat' => $data['berat'],
+                'jenis_hewan' => $data['jenis_hewan'],
+                'nama' => $data['nama'],
+                'umur' => $data['umur'] ?? null,
+                'berat' => $data['berat'] ?? null,
+                'kategori' => $data['kategori'] ?? null,
                 'harga' => $data['harga'],
                 'deskripsi' => $data['deskripsi'] ?? null,
                 'video_url' => $videoUrl,
@@ -110,9 +112,11 @@ class HewanKurbanService
             }
 
             $hewanKurban->update([
-                'jenis_sapi' => $data['jenis_sapi'],
-                'umur' => $data['umur'],
-                'berat' => $data['berat'],
+                'jenis_hewan' => $data['jenis_hewan'],
+                'nama' => $data['nama'],
+                'umur' => $data['umur'] ?? null,
+                'berat' => $data['berat'] ?? null,
+                'kategori' => $data['kategori'] ?? null,
                 'harga' => $data['harga'],
                 'deskripsi' => $data['deskripsi'] ?? null,
                 'video_url' => $videoUrl,

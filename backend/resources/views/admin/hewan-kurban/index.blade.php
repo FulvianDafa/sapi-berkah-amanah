@@ -73,7 +73,7 @@
                     <tr class="bg-gray-50">
                         <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                         <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
-                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Sapi</th>
+                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis - Nama</th>
                         <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Informasi</th>
                         <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
                         <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -91,7 +91,7 @@
                             @if($hewan->photos->isNotEmpty())
                                 <div class="relative group">
                                     <img src="{{ $hewan->photos->first()->url }}" 
-                                         alt="Foto {{ $hewan->jenis_sapi }}"
+                                         alt="Foto {{ $hewan->nama }}"
                                          class="h-16 w-16 rounded-lg object-cover ring-2 ring-gray-100">
                                     <!-- Preview on hover -->
                                     <div class="hidden group-hover:block absolute z-10 -translate-y-full top-0 left-0 p-2 bg-white rounded-lg shadow-lg border border-gray-200">
@@ -108,7 +108,11 @@
                         </td>
                         
                         <td class="px-4 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ $hewan->jenis_sapi }}</div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-medium text-gray-900">
+                                    {{ ucfirst($hewan->jenis_hewan) }} - {{ $hewan->nama }}
+                                </span>
+                            </div>
                             <!-- Media badges -->
                             <div class="flex items-center space-x-2 mt-1">
                                 @if($hewan->photos->count() > 0)
@@ -129,7 +133,8 @@
                         <td class="px-4 py-4 whitespace-nowrap">
                             <div class="flex flex-col space-y-2">
                                 <!-- Kategori -->
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                @if($hewan->kategori)
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium w-max
                                     {{ $hewan->kategori === 'prime' 
                                         ? 'bg-blue-100 text-blue-800' 
                                         : ($hewan->kategori === 'bigboss' 
@@ -137,14 +142,23 @@
                                             : 'bg-yellow-100 text-yellow-800') }}">
                                     {{ $hewan->kategori_label }}
                                 </span>
+                                @else
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium w-max bg-gray-100 text-gray-800">
+                                    Tanpa Kategori
+                                </span>
+                                @endif
                                 <!-- Info lainnya -->
                                 <div class="flex flex-col space-y-1">
+                                    @if($hewan->berat)
                                     <div class="text-sm text-gray-600">
                                         <i class="fas fa-weight-hanging text-gray-400 mr-1 w-4"></i> {{ $hewan->berat }} kg
                                     </div>
+                                    @endif
+                                    @if($hewan->umur)
                                     <div class="text-sm text-gray-600">
                                         <i class="fas fa-calendar text-gray-400 mr-1 w-4"></i> {{ $hewan->umur }} tahun
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </td>
