@@ -6,6 +6,13 @@
 5. Sesuaikan Controller + API untuk handle sapi & kambing (Validasi disesuaikan, kategori dibiarkan null untuk kambing)
 6. Update UI admin untuk tambah/edit kambing (Dropdown enum, label constraint dinamis, UI badge pembeda di index)
 
+[ FASE 1.5 - UI/UX REVAMP ]
+- [ ] Revamp Admin Layout & Navbar (Sidebar modern, navbar glassmorphism)
+- [ ] Redesign Dashboard (Gradient stats cards, premium table look)
+- [ ] Redesign Hewan Kurban List & Cards (Premium badge/gradients)
+- [ ] Redesign Hewan Kurban Form (Clean card-based form groups, soft focus rings)
+- [ ] Redesign Reseller View (Modern datatable styling, matching general list)
+
 [ FASE 2 ]
 7. Migrasi: is_admin → role enum('admin', 'reseller')
 8. Admin bisa CRUD akun reseller

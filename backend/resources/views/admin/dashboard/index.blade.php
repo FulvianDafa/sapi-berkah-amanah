@@ -3,104 +3,106 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="px-4">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800">Dashboard</h1>
-        <div class="flex gap-2">
-            <button class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                <i class="fas fa-download text-sm mr-2"></i>
-                Download Laporan
-            </button>
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <h1 class="text-lg font-semibold text-gray-900">Dashboard</h1>
+        <button class="btn-primary text-xs">
+            <i class="fas fa-download mr-1.5 text-[11px]"></i> Download Laporan
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-lg border border-gray-100 p-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
+                    <i class="fas fa-cow text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Total Hewan</p>
+                    <p class="text-xl font-bold text-gray-900">{{ $totalHewan }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-100 p-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+                    <i class="fas fa-check-circle text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Tersedia</p>
+                    <p class="text-xl font-bold text-gray-900">{{ $totalTersedia }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-100 p-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-sky-50 flex items-center justify-center text-sky-600">
+                    <i class="fas fa-shopping-cart text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Terjual</p>
+                    <p class="text-xl font-bold text-gray-900">{{ $totalTerjual }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-100 p-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
+                    <i class="fas fa-money-bill-wave text-sm"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 font-medium uppercase tracking-wide">Pendapatan</p>
+                    <p class="text-lg font-bold text-gray-900">Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
-        <!-- Total Hewan Kurban -->
-        <div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-lg">
-                <i class="fas fa-cow"></i>
-            </div>
-            <div class="mt-4">
-                <h6 class="text-gray-500 text-sm mb-1">Total Hewan Kurban</h6>
-                <h2 class="text-2xl font-bold">{{ $totalHewan }}</h2>
-            </div>
+    <!-- Recent Transactions -->
+    <div class="bg-white rounded-lg border border-gray-100">
+        <div class="px-5 py-3.5 border-b border-gray-50">
+            <h2 class="text-sm font-semibold text-gray-800">Transaksi Terbaru</h2>
         </div>
-
-        <!-- Hewan Tersedia -->
-        <div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-green-600 text-white rounded-lg">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="mt-4">
-                <h6 class="text-gray-500 text-sm mb-1">Hewan Tersedia</h6>
-                <h2 class="text-2xl font-bold">{{ $totalTersedia }}</h2>
-            </div>
-        </div>
-
-        <!-- Hewan Terjual -->
-        <div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-cyan-600 text-white rounded-lg">
-                <i class="fas fa-shopping-cart"></i>
-            </div>
-            <div class="mt-4">
-                <h6 class="text-gray-500 text-sm mb-1">Hewan Terjual</h6>
-                <h2 class="text-2xl font-bold">{{ $totalTerjual }}</h2>
-            </div>
-        </div>
-
-        <!-- Total Pendapatan -->
-        <div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-yellow-500 text-white rounded-lg">
-                <i class="fas fa-money-bill-wave"></i>
-            </div>
-            <div class="mt-4">
-                <h6 class="text-gray-500 text-sm mb-1">Total Pendapatan</h6>
-                <h2 class="text-2xl font-bold">Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</h2>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tabel Transaksi -->
-    <div class="bg-white rounded-lg shadow-sm">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h5 class="font-semibold text-gray-800">Transaksi Terbaru</h5>
-        </div>
-        <div class="p-6">
-            <div class="overflow-x-auto">
-                <table class="w-full min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Sapi</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($recentTransactions ?? [] as $transaction)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $loop->iteration }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $transaction->jenis_sapi }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Rp {{ number_format($transaction->harga, 0, ',', '.') }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $transaction->status === 'tersedia' 
-                                        ? 'bg-green-100 text-green-800' 
-                                        : 'bg-blue-100 text-blue-800' }}">
-                                    {{ ucfirst($transaction->status) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $transaction->created_at->format('d M Y') }}</td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data transaksi</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[560px] text-sm">
+                <thead>
+                    <tr class="border-b border-gray-50">
+                        <th class="px-5 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">No</th>
+                        <th class="px-5 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Jenis</th>
+                        <th class="px-5 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Harga</th>
+                        <th class="px-5 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Status</th>
+                        <th class="px-5 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                    @forelse($recentTransactions ?? [] as $transaction)
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="px-5 py-3 text-gray-400">{{ $loop->iteration }}</td>
+                        <td class="px-5 py-3 font-medium text-gray-700">{{ $transaction->jenis_sapi }}</td>
+                        <td class="px-5 py-3 font-medium text-gray-800">Rp {{ number_format($transaction->harga, 0, ',', '.') }}</td>
+                        <td class="px-5 py-3">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium
+                                {{ $transaction->status === 'tersedia'
+                                    ? 'bg-green-50 text-green-700'
+                                    : 'bg-sky-50 text-sky-700' }}">
+                                <span class="w-1 h-1 rounded-full {{ $transaction->status === 'tersedia' ? 'bg-green-500' : 'bg-sky-500' }}"></span>
+                                {{ ucfirst($transaction->status) }}
+                            </span>
+                        </td>
+                        <td class="px-5 py-3 text-gray-400">{{ $transaction->created_at->format('d M Y') }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-5 py-12 text-center text-gray-400 text-sm">
+                            <i class="fas fa-inbox text-2xl text-gray-200 mb-2 block"></i>
+                            Belum ada transaksi
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

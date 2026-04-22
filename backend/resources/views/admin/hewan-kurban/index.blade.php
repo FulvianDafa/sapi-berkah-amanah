@@ -3,228 +3,235 @@
 @section('title', 'Daftar Hewan Kurban')
 
 @section('content')
-<div class="p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800">Daftar Hewan Kurban</h1>
-        <a href="{{ route('admin.hewan-kurban.create') }}" 
-           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-            <i class="fas fa-plus mr-2"></i> Tambah Hewan
+<div class="space-y-5">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 class="text-lg font-semibold text-gray-900">Daftar Hewan Kurban</h1>
+        <a href="{{ route('admin.hewan-kurban.create') }}" class="btn-primary text-xs self-start">
+            <i class="fas fa-plus mr-1.5 text-[11px]"></i> Tambah Hewan
         </a>
     </div>
 
-    <!-- Kategori Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <!-- Prime Class -->
-        <div class="bg-blue-600 text-white rounded-lg shadow-sm">
-            <div class="p-6">
-                <h5 class="text-xl font-semibold mb-2">Prime Class</h5>
-                <p class="space-y-1">
-                    <span class="block">Range: Rp 0 - Rp 25.000.000</span>
-                    <span class="block">Total: {{ $totalPerKategori['prime'] }} ekor</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- Big Boss Class -->
-        <div class="bg-green-600 text-white rounded-lg shadow-sm">
-            <div class="p-6">
-                <h5 class="text-xl font-semibold mb-2">Big Boss Class</h5>
-                <p class="space-y-1">
-                    <span class="block">Range: Rp 25.000.001 - Rp 50.000.000</span>
-                    <span class="block">Total: {{ $totalPerKategori['bigboss'] }} ekor</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- Sultan Class -->
-        <div class="bg-yellow-500 text-white rounded-lg shadow-sm">
-            <div class="p-6">
-                <h5 class="text-xl font-semibold mb-2">Sultan Class</h5>
-                <p class="space-y-1">
-                    <span class="block">Range: > Rp 50.000.000</span>
-                    <span class="block">Total: {{ $totalPerKategori['sultan'] }} ekor</span>
-                </p>
-            </div>
-        </div>
-    </div>
-
     <!-- Filter -->
-    <div class="mb-6">
-        <form action="{{ route('admin.hewan-kurban.index') }}" method="GET" class="flex gap-3">
-            <select name="kategori" 
-                    class="rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                <option value="">Semua Kategori</option>
-                <option value="prime" {{ request('kategori') == 'prime' ? 'selected' : '' }}>Prime Class</option>
-                <option value="bigboss" {{ request('kategori') == 'bigboss' ? 'selected' : '' }}>Big Boss Class</option>
-                <option value="sultan" {{ request('kategori') == 'sultan' ? 'selected' : '' }}>Sultan Class</option>
-            </select>
-            <button type="submit" 
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Filter
-            </button>
+    <div class="bg-white rounded-lg border border-gray-100 p-4">
+        <form action="{{ route('admin.hewan-kurban.index') }}" method="GET" class="flex flex-col sm:flex-row gap-3 items-end">
+            <div class="w-full sm:w-auto">
+                <label class="block text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Jenis Hewan</label>
+                <select name="jenis_hewan"
+                        class="w-full sm:w-40 rounded-md border-gray-200 text-sm py-2 px-3 focus:border-green-600 focus:ring-green-600/30">
+                    <option value="">Semua</option>
+                    <option value="sapi" {{ request('jenis_hewan') == 'sapi' ? 'selected' : '' }}>Sapi</option>
+                    <option value="kambing" {{ request('jenis_hewan') == 'kambing' ? 'selected' : '' }}>Kambing</option>
+                </select>
+            </div>
+            <div class="w-full sm:w-auto">
+                <label class="block text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Kategori</label>
+                <select name="kategori"
+                        class="w-full sm:w-44 rounded-md border-gray-200 text-sm py-2 px-3 focus:border-green-600 focus:ring-green-600/30">
+                    <option value="">Semua</option>
+                    <option value="prime" {{ request('kategori') == 'prime' ? 'selected' : '' }}>Prime</option>
+                    <option value="bigboss" {{ request('kategori') == 'bigboss' ? 'selected' : '' }}>Big Boss</option>
+                    <option value="sultan" {{ request('kategori') == 'sultan' ? 'selected' : '' }}>Sultan</option>
+                </select>
+            </div>
+            <div class="flex gap-2">
+                <button type="submit" class="btn-primary text-xs">
+                    <i class="fas fa-filter mr-1 text-[10px]"></i> Filter
+                </button>
+                @if(request('jenis_hewan') || request('kategori'))
+                    <a href="{{ route('admin.hewan-kurban.index') }}" class="btn-secondary text-xs">Reset</a>
+                @endif
+            </div>
         </form>
     </div>
 
     <!-- Table -->
-    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead>
-                    <tr class="bg-gray-50">
-                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
-                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis - Nama</th>
-                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Informasi</th>
-                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th scope="col" class="px-4 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse ($hewanKurban as $hewan)
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $loop->iteration }}
-                        </td>
-                        
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            @if($hewan->photos->isNotEmpty())
-                                <div class="relative group">
-                                    <img src="{{ $hewan->photos->first()->url }}" 
-                                         alt="Foto {{ $hewan->nama }}"
-                                         class="h-16 w-16 rounded-lg object-cover ring-2 ring-gray-100">
-                                    <!-- Preview on hover -->
-                                    <div class="hidden group-hover:block absolute z-10 -translate-y-full top-0 left-0 p-2 bg-white rounded-lg shadow-lg border border-gray-200">
-                                        <img src="{{ $hewan->photos->first()->url }}" 
-                                             alt="Preview"
-                                             class="w-48 h-48 object-cover rounded-lg">
-                                    </div>
-                                </div>
-                            @else
-                                <span class="inline-flex items-center justify-center h-16 w-16 rounded-lg bg-gray-100">
-                                    <i class="fas fa-image text-gray-400 text-xl"></i>
-                                </span>
-                            @endif
-                        </td>
-                        
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <div class="flex items-center space-x-2">
-                                <span class="text-sm font-medium text-gray-900">
-                                    {{ ucfirst($hewan->jenis_hewan) }} - {{ $hewan->nama }}
-                                </span>
-                            </div>
-                            <!-- Media badges -->
-                            <div class="flex items-center space-x-2 mt-1">
-                                @if($hewan->photos->count() > 0)
-                                    <span class="inline-flex items-center px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded">
-                                        <i class="fas fa-images mr-1"></i> {{ $hewan->photos->count() }}
-                                    </span>
-                                @endif
-                                @if($hewan->video_url)
-                                    <a href="{{ $hewan->video_url }}" 
-                                       target="_blank"
-                                       class="inline-flex items-center px-2 py-0.5 bg-cyan-50 text-cyan-700 text-xs rounded hover:bg-cyan-100">
-                                        <i class="fas fa-play mr-1"></i> Video
-                                    </a>
-                                @endif
-                            </div>
-                        </td>
-                        
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <div class="flex flex-col space-y-2">
-                                <!-- Kategori -->
-                                @if($hewan->kategori)
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium w-max
-                                    {{ $hewan->kategori === 'prime' 
-                                        ? 'bg-blue-100 text-blue-800' 
-                                        : ($hewan->kategori === 'bigboss' 
-                                            ? 'bg-green-100 text-green-800' 
-                                            : 'bg-yellow-100 text-yellow-800') }}">
-                                    {{ $hewan->kategori_label }}
-                                </span>
-                                @else
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium w-max bg-gray-100 text-gray-800">
-                                    Tanpa Kategori
-                                </span>
-                                @endif
-                                <!-- Info lainnya -->
-                                <div class="flex flex-col space-y-1">
-                                    @if($hewan->berat)
-                                    <div class="text-sm text-gray-600">
-                                        <i class="fas fa-weight-hanging text-gray-400 mr-1 w-4"></i> {{ $hewan->berat }} kg
-                                    </div>
-                                    @endif
-                                    @if($hewan->umur)
-                                    <div class="text-sm text-gray-600">
-                                        <i class="fas fa-calendar text-gray-400 mr-1 w-4"></i> {{ $hewan->umur }} tahun
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </td>
-                        
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">
-                                Rp {{ number_format($hewan->harga, 0, ',', '.') }}
-                            </div>
-                        </td>
-                        
-                        <td class="px-4 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                {{ $hewan->status === 'tersedia' 
-                                    ? 'bg-green-100 text-green-800' 
-                                    : 'bg-gray-100 text-gray-800' }}">
-                                <span class="w-1.5 h-1.5 mr-1.5 rounded-full 
-                                    {{ $hewan->status === 'tersedia' ? 'bg-green-400' : 'bg-gray-400' }}">
-                                </span>
-                                {{ ucfirst($hewan->status) }}
-                            </span>
-                        </td>
-                        
-                        <td class="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div class="flex items-center justify-end space-x-2">
-                                <a href="{{ route('admin.hewan-kurban.edit', $hewan->id) }}" 
-                                   class="text-yellow-600 hover:text-yellow-900 transition-colors">
-                                    <span class="bg-yellow-50 p-1.5 rounded hover:bg-yellow-100">
-                                        <i class="fas fa-edit"></i>
-                                    </span>
-                                </a>
-                                
-                                <form action="{{ route('admin.hewan-kurban.destroy', $hewan->id) }}" 
-                                      method="POST" 
-                                      class="inline-block"
-                                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 transition-colors">
-                                        <span class="bg-red-50 p-1.5 rounded hover:bg-red-100">
-                                            <i class="fas fa-trash"></i>
-                                        </span>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" class="px-4 py-8 text-center">
-                            <div class="flex flex-col items-center justify-center text-gray-500">
-                                <i class="fas fa-inbox text-4xl mb-3"></i>
-                                <span class="text-lg">Tidak ada data hewan kurban</span>
-                                <p class="text-sm mt-1">Silakan tambah data baru</p>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+    <div id="table-container">
+        <div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[800px] text-sm">
+                    <thead>
+                        <tr class="border-b border-gray-100">
+                            <th class="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400 w-10">No</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400 w-16">Foto</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Nama</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Info</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Harga</th>
+                            <th class="px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-gray-400">Status</th>
+                            <th class="px-4 py-2.5 text-right text-xs font-medium uppercase tracking-wider text-gray-400 w-24">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse ($hewanKurban as $hewan)
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="px-4 py-3 text-gray-400">{{ $loop->iteration }}</td>
 
-        @if($hewanKurban->hasPages())
-            <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                {{ $hewanKurban->links() }}
+                            <!-- Foto -->
+                            <td class="px-4 py-3">
+                                @if($hewan->photos->isNotEmpty())
+                                    <div class="relative group">
+                                        <img src="{{ $hewan->photos->first()->url }}"
+                                             alt="{{ $hewan->nama }}"
+                                             class="h-10 w-10 rounded-md object-cover border border-gray-100">
+                                        <div class="hidden group-hover:block absolute z-10 bottom-full left-0 mb-1 p-1 bg-white rounded-lg shadow-lg border border-gray-100">
+                                            <img src="{{ $hewan->photos->first()->url }}" class="w-40 h-40 object-cover rounded">
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="h-10 w-10 rounded-md bg-gray-50 flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-300 text-xs"></i>
+                                    </div>
+                                @endif
+                            </td>
+
+                            <td class="px-4 py-3">
+                                <p class="text-sm font-medium text-gray-800">{{ $hewan->nama }}</p>
+                                <div class="flex items-center gap-1.5 mt-0.5">
+                                    <span class="text-xs text-gray-400">{{ ucfirst($hewan->jenis_hewan) }}</span>
+                                    @if($hewan->photos->count() > 0)
+                                        <span class="text-xs text-gray-300">·</span>
+                                        <span class="text-xs text-gray-400"><i class="fas fa-images text-[10px]"></i> {{ $hewan->photos->count() }}</span>
+                                    @endif
+                                    @if($hewan->video_url)
+                                        <span class="text-xs text-gray-300">·</span>
+                                        <a href="{{ $hewan->video_url }}" target="_blank" class="text-xs text-green-600 hover:text-green-700">
+                                            <i class="fas fa-play text-[10px]"></i> Video
+                                        </a>
+                                    @endif
+                                </div>
+                            </td>
+
+                            <!-- Info -->
+                            <td class="px-4 py-3">
+                                @if($hewan->kategori)
+                                    <span class="inline-block px-2 py-0.5 rounded text-xs font-medium
+                                        {{ $hewan->kategori === 'prime'
+                                            ? 'bg-sky-50 text-sky-600'
+                                            : ($hewan->kategori === 'bigboss'
+                                                ? 'bg-green-50 text-green-600'
+                                                : 'bg-amber-50 text-amber-600') }}">
+                                        {{ $hewan->kategori_label }}
+                                    </span>
+                                @else
+                                    <span class="inline-block px-2 py-0.5 rounded text-xs font-medium bg-gray-50 text-gray-400">Tanpa Kategori</span>
+                                @endif
+                                <div class="text-xs text-gray-500 mt-1 space-y-0.5">
+                                    <div><i class="fas fa-weight-hanging text-gray-400 w-3.5 text-center"></i> {{ $hewan->berat ? $hewan->berat . ' kg' : 'Belum diisi' }}</div>
+                                    <div><i class="fas fa-calendar text-gray-400 w-3.5 text-center"></i> {{ $hewan->umur ? $hewan->umur . ' tahun' : 'Belum diisi' }}</div>
+                                </div>
+                            </td>
+
+                            <!-- Harga -->
+                            <td class="px-4 py-3 font-semibold text-gray-800">Rp {{ number_format($hewan->harga, 0, ',', '.') }}</td>
+
+                            <!-- Status -->
+                            <td class="px-4 py-3">
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium
+                                    {{ $hewan->status === 'tersedia' ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-500' }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $hewan->status === 'tersedia' ? 'bg-green-500' : 'bg-gray-400' }}"></span>
+                                    {{ ucfirst($hewan->status) }}
+                                </span>
+                            </td>
+
+                            <!-- Aksi -->
+                            <td class="px-4 py-3">
+                                <div class="flex items-center justify-end gap-1">
+                                    <a href="{{ route('admin.hewan-kurban.edit', $hewan->id) }}"
+                                       class="w-8 h-8 flex items-center justify-center rounded text-amber-500 hover:bg-amber-50 transition-colors"
+                                       title="Edit">
+                                        <i class="fas fa-pen text-xs"></i>
+                                    </a>
+                                    <form action="{{ route('admin.hewan-kurban.destroy', $hewan->id) }}"
+                                          method="POST" class="inline"
+                                          onsubmit="return confirm('Hapus data ini?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit"
+                                                class="w-8 h-8 flex items-center justify-center rounded text-red-500 hover:bg-red-50 transition-colors"
+                                                title="Hapus">
+                                            <i class="fas fa-trash text-xs"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="px-4 py-12 text-center text-gray-400 text-sm">
+                                <i class="fas fa-cow text-2xl text-gray-200 mb-2 block"></i>
+                                Belum ada data · <a href="{{ route('admin.hewan-kurban.create') }}" class="text-green-600 hover:underline">Tambah baru</a>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-        @endif
+
+            @if($hewanKurban->hasPages())
+                <div class="px-4 py-2.5 border-t border-gray-50">
+                    {{ $hewanKurban->appends(request()->query())->links('vendor.pagination.simple') }}
+                </div>
+            @endif
+        </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('click', function(e) {
+    const link = e.target.closest('#table-container .pagination-link');
+    if (!link) return;
+
+    e.preventDefault();
+    const url = link.getAttribute('href');
+    const container = document.getElementById('table-container');
+
+    // Loading state
+    container.style.opacity = '0.5';
+    container.style.pointerEvents = 'none';
+
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTable = doc.getElementById('table-container');
+            if (newTable) {
+                container.innerHTML = newTable.innerHTML;
+            }
+            container.style.opacity = '1';
+            container.style.pointerEvents = '';
+
+            // Update URL without reload
+            history.pushState(null, '', url);
+
+            // Scroll to table top
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        })
+        .catch(() => {
+            // Fallback: navigate normally
+            window.location.href = url;
+        });
+});
+
+// Handle browser back/forward
+window.addEventListener('popstate', function() {
+    const container = document.getElementById('table-container');
+    container.style.opacity = '0.5';
+
+    fetch(window.location.href, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTable = doc.getElementById('table-container');
+            if (newTable) {
+                container.innerHTML = newTable.innerHTML;
+            }
+            container.style.opacity = '1';
+        })
+        .catch(() => window.location.reload());
+});
+</script>
+@endpush
 @endsection

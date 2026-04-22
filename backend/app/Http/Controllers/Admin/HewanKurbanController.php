@@ -26,8 +26,13 @@ class HewanKurbanController extends Controller
         try {
             $query = HewanKurban::with('photos');
 
+            // Filter berdasarkan jenis hewan jika ada
+            if ($request->filled('jenis_hewan')) {
+                $query->where('jenis_hewan', $request->jenis_hewan);
+            }
+
             // Filter berdasarkan kategori jika ada
-            if ($request->has('kategori')) {
+            if ($request->filled('kategori')) {
                 $query->kategori($request->kategori);
             }
 
