@@ -77,10 +77,17 @@ class HewanKurbanController extends Controller
                 $request->file('video')
             );
 
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Data hewan kurban berhasil disimpan']);
+            }
+
             return redirect()
                 ->route('admin.hewan-kurban.index')
                 ->with('success', 'Data hewan kurban berhasil disimpan');
         } catch (\Exception $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Gagal menyimpan data: ' . $e->getMessage()], 500);
+            }
             return back()
                 ->with('error', 'Gagal menyimpan data: ' . $e->getMessage())
                 ->withInput();
@@ -116,10 +123,17 @@ class HewanKurbanController extends Controller
                 $request->file('video')
             );
 
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Data berhasil diupdate']);
+            }
+
             return redirect()
                 ->route('admin.hewan-kurban.index')
                 ->with('success', 'Data berhasil diupdate');
         } catch (\Exception $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Gagal mengupdate data: ' . $e->getMessage()], 500);
+            }
             return back()
                 ->with('error', 'Gagal mengupdate data: ' . $e->getMessage())
                 ->withInput();

@@ -1,8 +1,7 @@
-@import "tailwindcss";
-@source "../views";
-
 /* ─── Google Font: Inter ─── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@source "../views";
 
 /* ─── Custom Theme Tokens ─── */
 @theme {
@@ -118,5 +117,10 @@
     }
     .badge-neutral {
         @apply bg-gray-100 text-gray-600 ring-1 ring-gray-300/40;
+    }
+
+    /* SweetAlert Loader Custom Color */
+    .swal2-loader {
+        border-color: #16a34a rgba(0,0,0,0) #16a34a rgba(0,0,0,0) !important;
     }
 }
