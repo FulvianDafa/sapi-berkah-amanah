@@ -10,6 +10,7 @@
 9. [FASE 1.5] Redesign Hewan Kurban List — Kategori cards dihapus, dual filter (jenis_hewan + kategori), info column fallback "Belum diisi", AJAX pagination (table-only refresh), custom Indonesian pagination (Sebelumnya/Berikutnya).
 10. [FASE 1.5] Redesign Hewan Kurban Form — Card-based form layout, green-focused inputs, improved dropzone, semua JS logic preserved.
 11. [FASE 1.5] Redesign Reseller View — Clean table, avatar initials, WhatsApp link hardcoded 62 prefix, Indonesian badges.
+12. [MINOR] Menambahkan enum `domba`, filter interaktif untuk `kategori` non-sapi, serta fitur AJAX status toggle `Tersedia/Terjual`.
 
 [ FASE 2 ]
 12. Migrasi: is_admin → role enum('admin', 'reseller')

@@ -15,13 +15,14 @@
             
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
                 <form id="filter-form" action="{{ route('admin.hewan-kurban.index') }}" method="GET" class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                    <select name="jenis_hewan" class="w-full sm:w-40 rounded-lg border-gray-200 text-sm py-2 px-3 focus:border-green-600 focus:ring-green-600/20 bg-gray-50 hover:bg-white transition-colors cursor-pointer">
+                    <select name="jenis_hewan" id="filter_jenis_hewan" class="w-full sm:w-40 rounded-lg border-gray-200 text-sm py-2 px-3 focus:border-green-600 focus:ring-green-600/20 bg-gray-50 hover:bg-white transition-colors cursor-pointer">
                         <option value="">Semua Jenis</option>
                         <option value="sapi" {{ request('jenis_hewan') == 'sapi' ? 'selected' : '' }}>Sapi</option>
                         <option value="kambing" {{ request('jenis_hewan') == 'kambing' ? 'selected' : '' }}>Kambing</option>
+                        <option value="domba" {{ request('jenis_hewan') == 'domba' ? 'selected' : '' }}>Domba</option>
                     </select>
                     
-                    <select name="kategori" class="w-full sm:w-40 rounded-lg border-gray-200 text-sm py-2 px-3 focus:border-green-600 focus:ring-green-600/20 bg-gray-50 hover:bg-white transition-colors cursor-pointer">
+                    <select name="kategori" id="filter_kategori" class="w-full sm:w-40 rounded-lg border-gray-200 text-sm py-2 px-3 focus:border-green-600 focus:ring-green-600/20 bg-gray-50 hover:bg-white transition-colors cursor-pointer">
                         <option value="">Semua Kategori</option>
                         <option value="prime" {{ request('kategori') == 'prime' ? 'selected' : '' }}>Prime</option>
                         <option value="bigboss" {{ request('kategori') == 'bigboss' ? 'selected' : '' }}>Big Boss</option>
@@ -111,11 +112,15 @@
 
                             <!-- Status -->
                             <td class="px-5 py-4">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border
-                                    {{ $hewan->status === 'tersedia' ? 'bg-green-50 text-green-700 border-green-100' : 'bg-gray-50 text-gray-600 border-gray-200' }}">
-                                    <span class="w-1.5 h-1.5 rounded-full {{ $hewan->status === 'tersedia' ? 'bg-green-500' : 'bg-gray-400' }}"></span>
+                                <button type="button" 
+                                        title="Klik untuk ubah status ke {{ $hewan->status === 'tersedia' ? 'Terjual' : 'Tersedia' }}"
+                                        onclick="toggleStatus({{ $hewan->id }}, '{{ $hewan->status === 'tersedia' ? 'terjual' : 'tersedia' }}', this)"
+                                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-200 group cursor-pointer
+                                        {{ $hewan->status === 'tersedia' ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100 hover:border-green-300' : 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100 hover:border-red-300' }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $hewan->status === 'tersedia' ? 'bg-green-500' : 'bg-red-500' }}"></span>
                                     {{ ucfirst($hewan->status) }}
-                                </span>
+                                    <i class="fas fa-exchange-alt text-[9px] opacity-40 group-hover:opacity-100 transition-opacity ml-0.5 {{ $hewan->status === 'tersedia' ? 'text-green-600' : 'text-red-600' }}"></i>
+                                </button>
                             </td>
 
                             <!-- Aksi -->
@@ -160,6 +165,50 @@
 
 @push('scripts')
 <script>
+const Toast = Swal.mixin({
+    toast: true, position: 'top-end', showConfirmButton: false,
+    timer: 3000, timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+    }
+});
+
+function toggleStatus(id, newStatus, btn) {
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin text-[10px]"></i>';
+    btn.disabled = true;
+    
+    // Ambil csrf dari salah satu form delete yang ada di halaman
+    const csrfToken = document.querySelector('input[name="_token"]')?.value;
+                    
+    fetch(`/admin/hewan-kurban/${id}/status`, {
+        method: 'PATCH',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ status: newStatus })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success) {
+            Toast.fire({ icon: 'success', title: data.message });
+            // Refresh tabel menggunakan trigger filter yang sudah ada
+            const filterForm = document.getElementById('filter-form');
+            if (filterForm) filterForm.dispatchEvent(new Event('change', { bubbles: true }));
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(err => {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+        Toast.fire({ icon: 'error', title: err.message || 'Gagal mengubah status' });
+    });
+}
+
 document.addEventListener('click', function(e) {
     const link = e.target.closest('#table-container .pagination-link');
     if (!link) return;
@@ -250,7 +299,35 @@ function showLoading(message = 'Memproses...') {
     });
 }
 
-document.getElementById('filter-form')?.addEventListener('change', function() {
+document.getElementById('filter_jenis_hewan')?.addEventListener('change', function() {
+    const kategoriSelect = document.getElementById('filter_kategori');
+    if (!kategoriSelect) return;
+    if(this.value === 'kambing' || this.value === 'domba') {
+        kategoriSelect.value = '';
+        kategoriSelect.disabled = true;
+        kategoriSelect.classList.add('opacity-50', 'cursor-not-allowed');
+    } else {
+        kategoriSelect.disabled = false;
+        kategoriSelect.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filterJenis = document.getElementById('filter_jenis_hewan');
+    if (filterJenis) filterJenis.dispatchEvent(new Event('change'));
+});
+
+document.getElementById('filter-form')?.addEventListener('change', function(e) {
+    if (e.target.id === 'filter_jenis_hewan') {
+        // Biarkan listener sebelumnya memproses disabled terlebih dahulu
+        // lalu form submit
+        setTimeout(() => submitFilterForm.call(this), 50);
+        return;
+    }
+    submitFilterForm.call(this);
+});
+
+function submitFilterForm() {
     const url = new URL(this.action);
     const formData = new FormData(this);
     for(let [key, val] of formData.entries()) {
@@ -271,7 +348,7 @@ document.getElementById('filter-form')?.addEventListener('change', function() {
             window.history.pushState({}, '', url);
         })
         .catch(() => window.location.href = url);
-});
+}
 </script>
 @endpush
 @endsection

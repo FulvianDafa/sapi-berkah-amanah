@@ -36,6 +36,7 @@
                                         class="w-full rounded-md border-gray-200 text-sm py-2 px-3 focus:border-green-600 focus:ring-green-600/30">
                                     <option value="sapi" {{ old('jenis_hewan', $hewanKurban->jenis_hewan ?? 'sapi') == 'sapi' ? 'selected' : '' }}>Sapi</option>
                                     <option value="kambing" {{ old('jenis_hewan', $hewanKurban->jenis_hewan ?? '') == 'kambing' ? 'selected' : '' }}>Kambing</option>
+                                    <option value="domba" {{ old('jenis_hewan', $hewanKurban->jenis_hewan ?? '') == 'domba' ? 'selected' : '' }}>Domba</option>
                                 </select>
                                 @error('jenis_hewan') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                             </div>
@@ -185,13 +186,13 @@
 // Toggle optional labels
 function toggleOptionalLabels() {
     const jenis = document.getElementById('jenis_hewan').value;
-    const isKambing = jenis === 'kambing';
+    const isNonSapi = jenis === 'kambing' || jenis === 'domba';
     document.querySelectorAll('.opt_text').forEach(el => {
-        if (isKambing) el.classList.remove('hidden');
+        if (isNonSapi) el.classList.remove('hidden');
         else el.classList.add('hidden');
     });
-    document.getElementById('umur').required = !isKambing;
-    document.getElementById('berat').required = !isKambing;
+    document.getElementById('umur').required = !isNonSapi;
+    document.getElementById('berat').required = !isNonSapi;
 }
 document.addEventListener('DOMContentLoaded', function() { toggleOptionalLabels(); });
 

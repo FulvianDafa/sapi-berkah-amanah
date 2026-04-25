@@ -58,7 +58,7 @@ class HewanKurbanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jenis_hewan' => 'required|in:sapi,kambing',
+            'jenis_hewan' => 'required|in:sapi,kambing,domba',
             'nama' => 'required|string|max:255',
             'umur' => 'nullable|numeric|min:0.1',
             'berat' => 'nullable|integer|min:1',
@@ -103,7 +103,7 @@ class HewanKurbanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'jenis_hewan' => 'required|in:sapi,kambing',
+            'jenis_hewan' => 'required|in:sapi,kambing,domba',
             'nama' => 'required|string|max:255',
             'umur' => 'nullable|numeric|min:0.1',
             'berat' => 'nullable|integer|min:1',
@@ -151,6 +151,21 @@ class HewanKurbanController extends Controller
                 ->with('success', 'Data berhasil dihapus');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate(['status' => 'required|in:tersedia,terjual']);
+        
+        try {
+            $hewanKurban = HewanKurban::findOrFail($id);
+            $hewanKurban->status = $request->status;
+            $hewanKurban->save();
+            
+            return response()->json(['success' => true, 'message' => 'Status berhasil diubah menjadi ' . ucfirst($request->status)]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal mengubah status: ' . $e->getMessage()], 500);
         }
     }
 

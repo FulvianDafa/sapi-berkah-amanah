@@ -87,12 +87,12 @@ backend/
 - Traits: `HasApiTokens` (Sanctum)
 
 ### `HewanKurban`
-- **Atribut Utama**: `jenis_hewan` (enum: sapi/kambing), `nama`, `umur` (nullable), `berat` (nullable), `harga`, `kategori` (nullable), `deskripsi`
+- **Atribut Utama**: `jenis_hewan` (enum: sapi/kambing/domba), `nama`, `umur` (nullable), `berat` (nullable), `harga`, `kategori` (nullable), `deskripsi`
 - **Business Logic Event**: Event `saving` akan otomatis menghitung kategori berdasarkan nilai input `berat`:
   - **prime**: berat < 500 kg
   - **bigboss**: berat 500–699 kg
   - **sultan**: berat ≥ 700 kg
-  - *Pengecualian:* Logika ini **hanya** berlaku jika `jenis_hewan === 'sapi'`. Jika kambing, nilai `kategori` akan diset paksa menjadi `null`.
+  - *Pengecualian:* Logika ini **hanya** berlaku jika `jenis_hewan === 'sapi'`. Jika kambing atau domba, nilai `kategori` akan diset paksa menjadi `null`.
 - **Relasi**: `hasMany(HewanKurbanPhoto::class)`
 
 ### `HewanKurbanPhoto`
@@ -121,6 +121,7 @@ backend/
 | POST | `/login` / `/logout` | `AdminAuthController` | — |
 | GET | `/admin/hewan-kurban/` | `HewanKurbanController` | `admin.hewan-kurban.index` - (Create, Store, Edit, Update, Destroy) |
 | DELETE | `/admin/hewan-kurban/photo/{id}`| `HewanKurbanController` | `admin.hewan-kurban.photo.delete` |
+| PATCH | `/admin/hewan-kurban/{id}/status`| `HewanKurbanController` | `admin.hewan-kurban.status.update` |
 
 ---
 
