@@ -58,7 +58,7 @@ class HewanKurbanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jenis_hewan' => 'required|in:sapi,kambing',
+            'jenis_hewan' => 'required|in:sapi,kambing,domba',
             'nama' => 'required|string|max:255',
             'umur' => 'nullable|numeric|min:0.1',
             'berat' => 'nullable|integer|min:1',
@@ -77,10 +77,17 @@ class HewanKurbanController extends Controller
                 $request->file('video')
             );
 
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Data hewan kurban berhasil disimpan']);
+            }
+
             return redirect()
                 ->route('admin.hewan-kurban.index')
                 ->with('success', 'Data hewan kurban berhasil disimpan');
         } catch (\Exception $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Gagal menyimpan data: ' . $e->getMessage()], 500);
+            }
             return back()
                 ->with('error', 'Gagal menyimpan data: ' . $e->getMessage())
                 ->withInput();
@@ -96,7 +103,7 @@ class HewanKurbanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'jenis_hewan' => 'required|in:sapi,kambing',
+            'jenis_hewan' => 'required|in:sapi,kambing,domba',
             'nama' => 'required|string|max:255',
             'umur' => 'nullable|numeric|min:0.1',
             'berat' => 'nullable|integer|min:1',
@@ -116,10 +123,17 @@ class HewanKurbanController extends Controller
                 $request->file('video')
             );
 
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Data berhasil diupdate']);
+            }
+
             return redirect()
                 ->route('admin.hewan-kurban.index')
                 ->with('success', 'Data berhasil diupdate');
         } catch (\Exception $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Gagal mengupdate data: ' . $e->getMessage()], 500);
+            }
             return back()
                 ->with('error', 'Gagal mengupdate data: ' . $e->getMessage())
                 ->withInput();
@@ -137,6 +151,21 @@ class HewanKurbanController extends Controller
                 ->with('success', 'Data berhasil dihapus');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate(['status' => 'required|in:tersedia,terjual']);
+        
+        try {
+            $hewanKurban = HewanKurban::findOrFail($id);
+            $hewanKurban->status = $request->status;
+            $hewanKurban->save();
+            
+            return response()->json(['success' => true, 'message' => 'Status berhasil diubah menjadi ' . ucfirst($request->status)]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal mengubah status: ' . $e->getMessage()], 500);
         }
     }
 

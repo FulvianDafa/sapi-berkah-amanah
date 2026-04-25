@@ -5,18 +5,17 @@
 4. Migrasi: tambah jenis_hewan, rename jenis_sapi → nama, nullable berat/umur/kategori (Selesai dengan MySQL modifier via doctrine)
 5. Sesuaikan Controller + API untuk handle sapi & kambing (Validasi disesuaikan, kategori dibiarkan null untuk kambing)
 6. Update UI admin untuk tambah/edit kambing (Dropdown enum, label constraint dinamis, UI badge pembeda di index)
-
-[ FASE 1.5 - UI/UX REVAMP ]
-- [ ] Revamp Admin Layout & Navbar (Sidebar modern, navbar glassmorphism)
-- [ ] Redesign Dashboard (Gradient stats cards, premium table look)
-- [ ] Redesign Hewan Kurban List & Cards (Premium badge/gradients)
-- [ ] Redesign Hewan Kurban Form (Clean card-based form groups, soft focus rings)
-- [ ] Redesign Reseller View (Modern datatable styling, matching general list)
+7. [FASE 1.5] Revamp Admin Layout & Navbar — Sidebar dark green premium, toggle desktop (localStorage persist) + mobile (overlay). Hamburger button fixed.
+8. [FASE 1.5] Redesign Dashboard — Clean stat cards, minimal table, font sizes adjusted.
+9. [FASE 1.5] Redesign Hewan Kurban List — Kategori cards dihapus, dual filter (jenis_hewan + kategori), info column fallback "Belum diisi", AJAX pagination (table-only refresh), custom Indonesian pagination (Sebelumnya/Berikutnya).
+10. [FASE 1.5] Redesign Hewan Kurban Form — Card-based form layout, green-focused inputs, improved dropzone, semua JS logic preserved.
+11. [FASE 1.5] Redesign Reseller View — Clean table, avatar initials, WhatsApp link hardcoded 62 prefix, Indonesian badges.
+12. [MINOR] Menambahkan enum `domba`, filter interaktif untuk `kategori` non-sapi, serta fitur AJAX status toggle `Tersedia/Terjual`.
 
 [ FASE 2 ]
-7. Migrasi: is_admin → role enum('admin', 'reseller')
-8. Admin bisa CRUD akun reseller
-9. Dashboard berbeda per role
+12. Migrasi: is_admin → role enum('admin', 'reseller')
+13. Admin bisa CRUD akun reseller
+14. Dashboard berbeda per role
 
 [ FASE 3 — tunda sampai alur jelas ]
-10. Sistem referral reseller
+15. Sistem referral reseller

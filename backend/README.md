@@ -1,66 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sapi Berkah Amanah - API Documentation & Frontend Guide
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Dokumen ini berisi panduan penggunaan REST API Backend untuk mempermudah tim Frontend dalam mengintegrasikan data. Harap perhatikan bagian **Perubahan Struktur Data** terkait adanya fitur baru (Kambing & Domba).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ⚠️ PERHATIAN: Perubahan Struktur Data (PENTING!)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Mulai versi terbaru, sistem tidak hanya menjual Sapi, tetapi juga Kambing dan Domba. Oleh karena itu, skema penamaan data telah diubah agar lebih umum (baku).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Saat ini, API **masih menyediakan** kunci (*keys*) versi lama agar Frontend yang sedang berjalan tidak *error* (Backward Compatibility). Namun, **kunci lama tersebut akan segera dihapus**. Tim Frontend **DIWAJIBKAN** untuk segera bermigrasi ke kunci data yang baru.
 
-## Learning Laravel
+| Kunci Lama (DEPRECATED) ❌ | Kunci Baru (STANDAR) ✅ | Penjelasan |
+| :--- | :--- | :--- |
+| `jenis_sapi` | **`nama`** | Nama hewannya (misal: "Limosin", "Brahman", "Etawa") |
+| `berat_sapi` | **`berat`** | Berat hewan dalam satuan Kilogram (kg) |
+| `umur_sapi` | **`umur`** | Umur hewan dalam satuan Tahun |
+| *(Belum ada)* | **`jenis_hewan`** | Jenis spesifiknya: `"sapi"`, `"kambing"`, atau `"domba"` |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+💡 **Tips untuk Frontend:**
+Gunakan nilai `jenis_hewan` untuk memisahkan section katalog di halaman web (contoh: memfilter array `data.filter(item => item.jenis_hewan === 'kambing')`).
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📌 Endpoint API Utama
 
-## Laravel Sponsors
+### 1. Ambil Semua Katalog Hewan (List)
+- **URL**: `/api/katalog`
+- **Method**: `GET`
+- **Deskripsi**: Mengambil seluruh data hewan kurban (Sapi, Kambing, Domba) yang berstatus **Tersedia**.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Contoh Response Sukses (200 OK):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "jenis_hewan": "sapi",
+      "nama": "Limosin Super",
+      "kategori": "sultan",
+      "berat": 650,
+      "umur": 3,
+      "harga": 35000000,
+      "photos": [
+        "http://domainanda.com/storage/photos/sapi1.jpg",
+        "http://domainanda.com/storage/photos/sapi2.jpg"
+      ]
+    },
+    {
+      "id": 2,
+      "jenis_hewan": "kambing",
+      "nama": "Etawa Super",
+      "kategori": "prime",
+      "berat": 45,
+      "umur": 1,
+      "harga": 4500000,
+      "photos": [
+        "http://domainanda.com/storage/photos/kambing1.jpg"
+      ]
+    }
+  ]
+}
+```
 
-### Premium Partners
+### 2. Detail Hewan Kurban
+- **URL**: `/api/katalog/{id}`
+- **Method**: `GET`
+- **Deskripsi**: Mengambil detail satu hewan kurban berdasarkan ID, mencakup deskripsi lengkap dan URL video.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+**Contoh Response Sukses (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "jenis_hewan": "sapi",
+    "nama": "Limosin Super",
+    "kategori": "sultan",
+    "berat": 650,
+    "umur": 3,
+    "harga": 35000000,
+    "deskripsi": "Sapi sehat walafiat rawatan khusus.",
+    "video_url": "https://youtube.com/watch?v=xxxxx",
+    "photos": [
+      "http://domainanda.com/storage/photos/sapi1.jpg"
+    ]
+  }
+}
+```
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 💡 Format Pesan WhatsApp Dinamis (Saran UI/UX)
+Dengan adanya `jenis_hewan` dan `nama`, saat user menekan tombol "Pesan Sekarang", Frontend bisa membuat pesan otomatis yang dinamis seperti ini:
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```javascript
+// Contoh di Vue/React/JS murni
+const textWa = `Halo, saya tertarik untuk memesan ${item.jenis_hewan} jenis ${item.nama} (${item.kategori}) dengan berat ${item.berat}kg. Apakah masih tersedia?`;
+```
+*Hasil Output:* "Halo, saya tertarik untuk memesan kambing jenis Etawa Super (prime) dengan berat 45kg. Apakah masih tersedia?"

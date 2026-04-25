@@ -15,7 +15,7 @@
     </div>
 
     <form action="{{ isset($hewanKurban) ? route('admin.hewan-kurban.update', $hewanKurban->id) : route('admin.hewan-kurban.store') }}"
-          method="POST" enctype="multipart/form-data" id="hewanKurbanForm">
+          method="POST" enctype="multipart/form-data" id="hewanKurbanForm" novalidate>
         @csrf
         @if(isset($hewanKurban)) @method('PUT') @endif
 
@@ -36,6 +36,7 @@
                                         class="w-full rounded-md border-gray-200 text-sm py-2 px-3 focus:border-green-600 focus:ring-green-600/30">
                                     <option value="sapi" {{ old('jenis_hewan', $hewanKurban->jenis_hewan ?? 'sapi') == 'sapi' ? 'selected' : '' }}>Sapi</option>
                                     <option value="kambing" {{ old('jenis_hewan', $hewanKurban->jenis_hewan ?? '') == 'kambing' ? 'selected' : '' }}>Kambing</option>
+                                    <option value="domba" {{ old('jenis_hewan', $hewanKurban->jenis_hewan ?? '') == 'domba' ? 'selected' : '' }}>Domba</option>
                                 </select>
                                 @error('jenis_hewan') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                             </div>
@@ -185,13 +186,13 @@
 // Toggle optional labels
 function toggleOptionalLabels() {
     const jenis = document.getElementById('jenis_hewan').value;
-    const isKambing = jenis === 'kambing';
+    const isNonSapi = jenis === 'kambing' || jenis === 'domba';
     document.querySelectorAll('.opt_text').forEach(el => {
-        if (isKambing) el.classList.remove('hidden');
+        if (isNonSapi) el.classList.remove('hidden');
         else el.classList.add('hidden');
     });
-    document.getElementById('umur').required = !isKambing;
-    document.getElementById('berat').required = !isKambing;
+    document.getElementById('umur').required = !isNonSapi;
+    document.getElementById('berat').required = !isNonSapi;
 }
 document.addEventListener('DOMContentLoaded', function() { toggleOptionalLabels(); });
 
@@ -206,9 +207,21 @@ const Toast = Swal.mixin({
 
 function showNotification(type, message) { Toast.fire({ icon: type, title: message }); }
 
-function showLoading(message = 'Sedang memproses...') {
-    Swal.fire({ title: message, allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-    setTimeout(() => { if (Swal.isVisible()) { Swal.close(); showNotification('error', 'Timeout, coba lagi'); } }, 20000);
+function showLoading(message = 'Menyimpan data...') {
+    Swal.fire({
+        html: `
+            <div class="flex flex-col items-center gap-3 py-2">
+                <div class="w-10 h-10 border-4 border-gray-100 border-t-green-600 rounded-full animate-spin"></div>
+                <span class="text-sm font-medium text-gray-700">${message}</span>
+            </div>
+        `,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        width: 'auto',
+        background: '#ffffff',
+        backdrop: 'rgba(255, 255, 255, 0.6)',
+        customClass: { popup: 'rounded-2xl shadow-sm border border-gray-100' }
+    });
 }
 
 function hideLoading() { Swal.close(); }
@@ -309,27 +322,156 @@ function deletePhoto(photoId, button) {
     });
 }
 
-document.getElementById('hewanKurbanForm').addEventListener('submit', function(e) {
+const form = document.getElementById('hewanKurbanForm');
+const inputs = form.querySelectorAll('input:not([type="hidden"]), select, textarea');
+
+function setInvalid(input, msg) {
+    input.classList.add('border-red-300', 'focus:border-red-400', 'focus:ring-red-400/20');
+    input.classList.remove('border-gray-200', 'focus:border-green-600', 'focus:ring-green-600/30', 'border-red-500', 'focus:border-red-500', 'focus:ring-red-500/30');
+    
+    let container = input.parentElement.classList.contains('relative') ? input.parentElement.parentElement : input.parentElement;
+    let errorEl = container.querySelector('.js-error');
+    
+    if (!errorEl) {
+        errorEl = document.createElement('p');
+        errorEl.className = 'mt-1 text-xs text-red-500 js-error';
+        container.appendChild(errorEl);
+    }
+    errorEl.textContent = msg;
+}
+
+function setValid(input) {
+    input.classList.remove('border-red-300', 'focus:border-red-400', 'focus:ring-red-400/20', 'border-red-500', 'focus:border-red-500', 'focus:ring-red-500/30');
+    input.classList.add('border-gray-200', 'focus:border-green-600', 'focus:ring-green-600/30');
+    
+    let container = input.parentElement.classList.contains('relative') ? input.parentElement.parentElement : input.parentElement;
+    let errorEl = container.querySelector('.js-error');
+    if (errorEl) errorEl.remove();
+}
+
+function validateInput(input) {
+    if (input.type === 'file') return true; // File handled separately
+    
+    // Custom validation for harga_display
+    if (input.id === 'harga_display') {
+        const val = parseInt(input.value.replace(/\D/g, ''));
+        if (isNaN(val) || val <= 0) {
+            setInvalid(input, 'Harga harus lebih dari 0');
+            return false;
+        }
+        setValid(input);
+        return true;
+    }
+
+    if (!input.checkValidity()) {
+        let msg = 'Harap isi bidang ini';
+        if (input.validity.typeMismatch || input.validity.badInput) msg = 'Format tidak sesuai';
+        else if (input.validity.rangeUnderflow) msg = 'Nilai terlalu kecil';
+        
+        setInvalid(input, msg);
+        return false;
+    }
+    setValid(input);
+    return true;
+}
+
+inputs.forEach(input => {
+    input.addEventListener('blur', () => validateInput(input));
+    input.addEventListener('input', () => {
+        if (input.classList.contains('border-red-300') || input.classList.contains('border-red-500')) validateInput(input);
+    });
+});
+
+form.addEventListener('submit', async function(e) {
     e.preventDefault();
     const photoContainer = document.getElementById('imagePreviewContainer');
     const errorDiv = document.getElementById('photoError');
-    if (photoContainer.querySelectorAll('.relative').length === 0) {
+    
+    // Reset previous errors
+    document.querySelectorAll('.ajax-error').forEach(el => el.remove());
+    
+    let isFormValid = true;
+    inputs.forEach(input => {
+        if (!validateInput(input)) isFormValid = false;
+    });
+
+    const isEdit = this.action.includes('hewan-kurban/');
+    
+    if (photoContainer.querySelectorAll('.relative').length === 0 && !isEdit) {
         errorDiv.classList.remove('hidden');
-        window.scrollTo({ top: errorDiv.offsetTop - 100, behavior: 'smooth' });
-        showNotification('error', 'Minimal 1 foto');
+        isFormValid = false;
+    }
+    
+    if (!isFormValid) {
+        const firstError = form.querySelector('.border-red-300') || form.querySelector('.border-red-500') || errorDiv;
+        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showNotification('error', 'Silakan periksa kembali isian form');
         return;
     }
+    
     const hargaValue = hargaInput.value;
     if (hargaValue) hargaInput.value = hargaValue.replace(/\D/g, '');
+    
     showLoading('Menyimpan...');
-    const submitTimeout = setTimeout(() => { hideLoading(); showNotification('error', 'Timeout'); }, 30000);
-    this.dataset.submitTimeout = submitTimeout;
-    this.submit();
-});
-
-window.addEventListener('unload', function() {
-    const form = document.getElementById('hewanKurbanForm');
-    if (form && form.dataset.submitTimeout) clearTimeout(form.dataset.submitTimeout);
+    
+    try {
+        const formData = new FormData(this);
+        const response = await fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        });
+        
+        hideLoading();
+        
+        if (response.ok) {
+            localStorage.setItem('toast_success', 'Data hewan kurban berhasil disimpan');
+            window.location.href = "{{ route('admin.hewan-kurban.index') }}";
+        } else if (response.status === 422) {
+            const data = await response.json();
+            const errors = data.errors;
+            let firstError = null;
+            
+            for (let key in errors) {
+                let fieldId = key;
+                if (key.includes('.')) fieldId = key.split('.')[0];
+                
+                const input = document.getElementById(fieldId) || document.querySelector(`[name="${fieldId}"]`);
+                if (input && input.parentElement) {
+                    const errorP = document.createElement('p');
+                    errorP.className = 'mt-1 text-xs text-red-500 ajax-error';
+                    errorP.textContent = errors[key][0];
+                    
+                    if (input.parentElement.classList.contains('relative')) {
+                        input.parentElement.parentElement.appendChild(errorP);
+                    } else {
+                        input.parentElement.appendChild(errorP);
+                    }
+                    
+                    if (!firstError) firstError = input;
+                }
+            }
+            
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            showNotification('error', 'Silakan periksa kembali isian form');
+            
+            if (hargaValue) hargaDisplay.value = parseInt(hargaValue.replace(/\D/g, '')).toLocaleString('id-ID');
+            
+        } else {
+            const data = await response.json();
+            showNotification('error', data.message || 'Terjadi kesalahan pada server');
+            if (hargaValue) hargaDisplay.value = parseInt(hargaValue.replace(/\D/g, '')).toLocaleString('id-ID');
+        }
+    } catch (err) {
+        hideLoading();
+        showNotification('error', 'Terjadi kesalahan koneksi');
+        if (hargaValue) hargaDisplay.value = parseInt(hargaValue.replace(/\D/g, '')).toLocaleString('id-ID');
+    }
 });
 
 const hargaDisplay = document.getElementById('harga_display');
