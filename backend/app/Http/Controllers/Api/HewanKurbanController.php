@@ -23,8 +23,12 @@ class HewanKurbanController extends Controller
                     'id' => $item->id,
                     'jenis_hewan' => $item->jenis_hewan,
                     'nama' => $item->nama,
+                    'jenis_sapi' => ucfirst($item->jenis_hewan) . ' ' . $item->nama, // TODO: Hapus baris ini nanti
                     'kategori' => $item->kategori,
-                    'berat' => $item->berat, // kita perbarui key API-nya agar masuk akal
+                    'berat' => $item->berat,
+                    'berat_sapi' => $item->berat, // TODO: Hapus baris ini nanti
+                    'umur' => $item->umur,
+                    'umur_sapi' => $item->umur, // TODO: Hapus baris ini nanti
                     'harga' => $item->harga,
                     'photos' => $item->photos->map(function ($photo) {
                         return $photo->url;
@@ -56,8 +60,12 @@ class HewanKurbanController extends Controller
                     'id' => $item->id,
                     'jenis_hewan' => $item->jenis_hewan,
                     'nama' => $item->nama,
+                    'jenis_sapi' => ucfirst($item->jenis_hewan) . ' ' . $item->nama, // TODO: Hapus baris ini nanti
                     'kategori' => $item->kategori,
                     'berat' => $item->berat,
+                    'berat_sapi' => $item->berat, // TODO: Hapus baris ini nanti
+                    'umur' => $item->umur,
+                    'umur_sapi' => $item->umur, // TODO: Hapus baris ini nanti
                     'harga' => $item->harga,
                     'deskripsi' => $item->deskripsi,
                     'photos' => $item->photos->map(function ($photo) {
