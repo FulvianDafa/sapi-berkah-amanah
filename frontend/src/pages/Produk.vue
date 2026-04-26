@@ -13,21 +13,6 @@
     <span class="text-gray-700 font-medium">Katalog</span>
   </ol>
 </nav>
-    <!-- <div class="flex justify-between">
-      <!-- sidebar -->
-      <!-- <div class="w-[300px] px-5 py-10 h-auto"> 
-        <div class="bg-green-50 shadow p-5 rounded-lg flex flex-col gap-2 h-full">
-            <div class="bg-green-600 text-white py-3 px-5 rounded-lg">
-              Sapi
-            </div>
-            <div class="bg-green-200 text-black py-3 px-5 rounded-lg">
-              Kambing
-            </div>
-            <div class="bg-green-200 text-black py-3 px-5 rounded-lg">
-              Domba
-            </div>
-        </div>
-      </div> --> 
       <div class="flex-1 ">
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-8">
