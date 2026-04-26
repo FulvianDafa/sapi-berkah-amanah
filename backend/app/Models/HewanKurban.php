@@ -42,7 +42,7 @@ class HewanKurban extends Model
                 } else {
                     $hewan->kategori = 'prime';
                 }
-            } elseif ($hewan->jenis_hewan === 'kambing') {
+            } elseif (in_array($hewan->jenis_hewan, ['kambing', 'domba'])) {
                 $hewan->kategori = null;
             }
         });

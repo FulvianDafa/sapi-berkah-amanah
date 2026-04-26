@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - Admin Sapi Berkah Amanah</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -107,22 +108,7 @@
 
             <!-- Content -->
             <main class="flex-1 p-4 sm:p-6">
-                @if(session('success'))
-                    <div id="flash-success"
-                         class="mb-5 flex items-center gap-3 p-3 rounded-lg bg-green-50 border border-green-100 text-green-700 text-sm" role="alert">
-                        <i class="fas fa-check-circle text-green-500 text-sm shrink-0"></i>
-                        <span class="flex-1">{{ session('success') }}</span>
-                        <button onclick="this.parentElement.remove()" class="text-green-400 hover:text-green-600"><i class="fas fa-times text-xs"></i></button>
-                    </div>
-                @endif
-                @if(session('error'))
-                    <div id="flash-error"
-                         class="mb-5 flex items-center gap-3 p-3 rounded-lg bg-red-50 border border-red-100 text-red-700 text-sm" role="alert">
-                        <i class="fas fa-exclamation-circle text-red-500 text-sm shrink-0"></i>
-                        <span class="flex-1">{{ session('error') }}</span>
-                        <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600"><i class="fas fa-times text-xs"></i></button>
-                    </div>
-                @endif
+
                 @yield('content')
             </main>
 
@@ -186,13 +172,17 @@
             applySidebarState(desktopVisible);
         }
 
-        // Auto-dismiss flash
-        document.querySelectorAll('[id^="flash-"]').forEach(el => {
-            setTimeout(() => {
-                el.style.transition = 'opacity .3s';
-                el.style.opacity = '0';
-                setTimeout(() => el.remove(), 300);
-            }, 4000);
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lsSuccess = localStorage.getItem('toast_success');
+            if (lsSuccess) {
+                Swal.mixin({ toast:true, position:'top-end', showConfirmButton:false, timer:3000, timerProgressBar:true })
+                    .fire({ icon:'success', title: lsSuccess });
+                localStorage.removeItem('toast_success');
+            }
         });
     </script>
 
