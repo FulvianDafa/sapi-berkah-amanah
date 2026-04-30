@@ -45,17 +45,29 @@
         <div v-else class="flex flex-row gap-0">
           <div class="hidden md:block w-[400px] px-5 py-4 h-auto "> 
             <div class="bg-white p-5 rounded-lg flex flex-col gap-2 h-full">
-                <div class=" font-semibold group text-green-600 bg-gray-100 rounded-t-lg">
-                  <div class="py-3 px-5 ">Sapi</div>
-                  <div class="h-1 rounded-xl w-full duration-300 bg-green-600"></div>
-                </div>
-                <div class="text-black font-semibold group hover:text-green-600 hover:bg-gray-100 rounded-t-lg">
-                  <div class="py-3 px-5 ">Kambing</div>
-                  <div class="h-1 rounded-xl w-0 group-hover:w-full duration-300 bg-green-600"></div>
-                </div>
-                <div class="text-black font-semibold group hover:text-green-600 hover:bg-gray-100 rounded-t-lg">
-                  <div class="py-3 px-5 ">Domba</div>
-                  <div class="h-1 rounded-xl w-0 group-hover:w-full duration-300 bg-green-600"></div>
+                <div
+                  v-for="hewan in jenisHewan"
+                  :key="hewan"
+                  @click="selectHewan(hewan)"
+                  :class="[
+                    'font-semibold group rounded-t-lg',
+                    selectedJenishewan === hewan
+                      ? 'text-green-600 bg-gray-100'
+                      : 'text-black hover:text-green-600 hover:bg-gray-100'
+                  ]"
+                >
+                  <div class="py-3 px-5">
+                    {{ hewan }}
+                  </div>
+
+                  <div
+                    :class="[
+                      'h-1 rounded-xl duration-300 bg-green-600',
+                      selectedJenishewan === hewan
+                        ? 'w-full'
+                        : 'w-0 group-hover:w-full'
+                    ]"
+                  ></div>
                 </div>
             </div>
           </div>
@@ -64,7 +76,9 @@
             <!-- Tab Kategori -->
             <div class="flex flex-col lg:flex-row justify-center md:justify-between mb-6 bg-white pt-2 md:px-4 pb-2 rounded-lg ">
               <div class="flex flex-row items-center justify-between md:justify-center lg:justify-between px-5 sm:px-20 md:px-0 my-3">
-                <h1 class="text-lg line-height md:text-xl lg:text-3xl font-bold text-center">KATALOG SAPI</h1>
+                <h1 class="text-lg md:text-xl lg:text-3xl font-bold text-center">
+                  KATALOG {{ selectedHewan.toUpperCase() }}
+                </h1>
                 <button 
                   @click="showModal = true" 
                   class="flex flex-row gap-2 text-md md:text-lg md:hidden bg-green-600 rounded-lg font-semibold py-2 px-3 md:py-2 md:px-4 text-white">
@@ -73,7 +87,7 @@
                   </svg>
                 </button>
               </div>  
-              <div class="flex flex-wrap justify-center space-x-6 sm:space-x-15 md:space-x-6 mt-2 md:mt-0">
+              <div v-if="selectedHewan === 'sapi'" class="flex flex-wrap justify-center space-x-6 sm:space-x-15 md:space-x-6 mt-2 md:mt-0">
                 <button
                   v-for="cat in categories"
                   :key="cat"
@@ -113,7 +127,7 @@
                   class="w-full h-40 object-cover rounded mb-4"
                 />
                 <h3 class="text-sm md:text-lg font-bold text-green-700">
-                  {{ item.jenis_sapi}} SAPI AUSTRALIA
+                  {{ item.jenis_sapi}}
                 </h3>
                 <p class="text-md font-semibold text-green-600">
                   Rp {{ formatPrice(item.harga) }}
@@ -232,7 +246,7 @@
         @click="selectHewan('Domba')"
         class="text-left group pt-2 rounded hover:bg-gray-100"
       >
-        <div class="pt-1 pb-2 px-3 ">Kambing</div>
+        <div class="pt-1 pb-2 px-3 ">Domba</div>
         <div class="h-1 rounded-xl w-0 group-hover:w-full duration-300 bg-green-600"></div>
       </button>
     </div>
@@ -251,6 +265,7 @@ const loading = ref(false);
 const error = ref(null);
 const sapiItems = ref([]);
 const showModal = ref(false);
+const selectedHewan = ref("sapi"); // default sapi
 // Kategori statis
 const categories = [
   "Semua",
@@ -259,6 +274,13 @@ const categories = [
   "Sultan Class"
 ];
 const selectedCategory = ref("Semua");
+
+const jenisHewan = [
+  "Sapi",
+  "Kambing",
+  "Domba"
+]
+const selectedJenishewan = ref("Sapi");
 
 // Format harga ke format Rupiah
 const formatPrice = (price) => {
@@ -273,16 +295,36 @@ const generateWhatsAppLink = (item) => {
 
 // Filter berdasarkan kategori aktif
 const filteredItems = computed(() => {
-  if (selectedCategory.value === "Semua") return sapiItems.value;
-  const map = {
-    "Prime Class": "prime",
-    "Bigboss Class": "bigboss",
-    "Sultan Class": "sultan"
-  };
-  return sapiItems.value.filter(
-    (item) => item.kategori === map[selectedCategory.value]
+  let items = sapiItems.value;
+
+  // filter berdasarkan jenis hewan
+  items = items.filter(
+    (item) => item.jenis_hewan === selectedHewan.value
   );
+
+  // filter kategori
+  if (selectedCategory.value !== "Semua") {
+    const map = {
+      "Prime Class": "prime",
+      "Bigboss Class": "bigboss",
+      "Sultan Class": "sultan"
+    };
+
+    items = items.filter(
+      (item) => item.kategori === map[selectedCategory.value]
+    );
+  }
+
+  return items;
 });
+
+function selectHewan(hewan) {
+  selectedJenishewan.value = hewan; // INI WAJIB
+  selectedHewan.value = hewan.toLowerCase(); // kalau dipakai filter
+  selectedCategory.value = "Semua";
+  currentPage.value = 1;
+  showModal.value = false;
+}
 
 const itemsPerPage = 6;
 const currentPage = ref(1);
